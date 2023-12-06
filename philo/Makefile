@@ -6,7 +6,7 @@
 #    By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/06 13:45:55 by fporciel          #+#    #+#              #
-#    Updated: 2023/12/06 14:04:11 by fporciel         ###   ########.fr        #
+#    Updated: 2023/12/06 14:54:36 by fporciel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 # 'Philosophers' is a simulation program that explores concurrent programming
@@ -43,12 +43,12 @@ CC := gcc
 CFLAGS := -std=c17 -pedantic-errors -Wall -Wextra -Werror -g \
 		  $(addprefix -I, $(DIR))
 LDLIBS := $(addprefix -L, $(DIR))
-#LDFLAGS := 
+LDFLAGS := -lc
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LDLIBS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(LDLIBS) $(LDFLAGS) -o $(NAME)
 
 $(OBJS): $(SRCS) $(HDR)
 	$(CC) $(CFLAGS) -c $(SRCS) $(HDR)
