@@ -6,7 +6,7 @@
 #    By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/06 11:21:05 by fporciel          #+#    #+#              #
-#    Updated: 2023/12/06 13:39:22 by fporciel         ###   ########.fr        #
+#    Updated: 2023/12/06 13:43:57 by fporciel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 # 'Philosophers' is a simulation program that explores concurrent programming
@@ -32,7 +32,8 @@
 #- fporciel@student.42roma.it
 #
 
-.PHONY: all bonus clean fclean re rebonus
+.PHONY: all bonus clean fclean re rebonus autogit memcheck helgrind \
+	bmemcheck bhelgrind
 .DEFAULT_GOAL: all
 DIR := $(shell pwd)
 NAMEDIR := $(DIR)/philo
@@ -61,4 +62,13 @@ fclean: clean $(LIBS)
 re: clean fclean all
 
 rebonus: clean fclean bonus
+
+autogit: fclean
+	git status
+	git add *
+	git status
+	echo "\nPlease, enter your commit message:"
+	read commit_message; git commit -m "$$commit_message"
+	git status
+	git push
 
