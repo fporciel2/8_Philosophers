@@ -6,7 +6,7 @@
 #    By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/06 13:45:55 by fporciel          #+#    #+#              #
-#    Updated: 2023/12/06 14:02:26 by fporciel         ###   ########.fr        #
+#    Updated: 2023/12/06 14:04:11 by fporciel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 # 'Philosophers' is a simulation program that explores concurrent programming
@@ -32,7 +32,7 @@
 #- fporciel@student.42roma.it
 #
 
-.PHONY: all
+.PHONY: all autogit
 .DEFAULT_GOAL: all
 NAME := philo
 DIR := $(shell pwd)
@@ -53,4 +53,7 @@ $(NAME): $(OBJS)
 $(OBJS): $(SRCS) $(HDR)
 	$(CC) $(CFLAGS) -c $(SRCS) $(HDR)
 	rm -f philo.h.gch
+
+autogit:
+	cd .. && make autogit && cd philo
 
