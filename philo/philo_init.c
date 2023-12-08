@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 13:36:28 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/08 14:07:13 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/08 14:11:48 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -60,8 +60,8 @@ int	phi_init(t_philo *phi, int argc, char **argv)
 	if (argc == 5)
 		phi->notepme = ft_atol(argv[4]);
 	phi->nop = ft_atol(argv[0]);
-	phi->ttd = phi_atou(phi_atom(argv[1]));
-	phi->tte = phi_atou(phi_atom(argv[2]));
-	phi->tts = phi_atou(phi_atom(argv[3]));
+	phi->ttd = phi_atoitou(argv[1]);
+	phi->tte = phi_atoitou(argv[2]);
+	phi->tts = phi_atoitou(argv[3]);
 	return (i);
 }

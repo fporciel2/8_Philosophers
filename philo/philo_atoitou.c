@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   philo_atoitou.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/06 14:05:21 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/08 14:10:49 by fporciel         ###   ########.fr       */
+/*   Created: 2023/12/08 14:12:50 by fporciel          #+#    #+#             */
+/*   Updated: 2023/12/08 14:21:59 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -30,31 +30,50 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef PHILO_H
-# define PHILO_H
-# include <string.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <sys/time.h>
-# include <pthread.h>
-# include <time.h>
-# include <sys/types.h>
-# include <stddef.h>
+#include "philo.h"
 
-typedef struct s_philo
+static useconds_t	phi_power(useconds_t base, useconds_t exp)
 {
-	long long	nop;
-	useconds_t	ttd;
-	useconds_t	tte;
-	useconds_t	tts;
-	long long	notepme;
-	int			result;
-}				t_philo;
+	useconds_t	power;
+	useconds_t	cpower;
 
-int			phi_init(t_philo *phi, int argc, char **argv);
-int			ft_isdigit(char c);
-long long	ft_atol(char *nptr);
-useconds_t	phi_atoitou(char *nptr);
+	if ((base == 0) && (exp != 0))
+		return (0);
+	else if (exp == 0)
+		return (1);
+	else
+	{
+		power = 1;
+		cpower = base;
+		while (exp)
+		{
+			if (exp & 1)
+				power *= cpower;
+			cpower *= cpower;
+			exp >>= 1;
+		}
+	}
+	return (power);
+}
 
-#endif
+useconds_t	phi_atoitou(char *nptr)
+{
+	useconds_t	i;
+	useconds_t	j;
+	useconds_t	num;
+	useconds_t	exp;
+
+	i = 0;
+	num = 0;
+	j = 0;
+	while (ft_isdigit(nptr[i]))
+		i++;
+	exp = ((i - j) - 1);
+	while (j < i)
+	{
+		num = num + ((nptr[j] - 48) * phi_power(10, exp));
+		exp--;
+		j++;
+	}
+	return (num * 1000);
+}
