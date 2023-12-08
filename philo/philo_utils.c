@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 13:45:10 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/08 13:46:54 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/08 14:35:02 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -29,6 +29,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+
+#include "philo.h"
 
 int	ft_isdigit(char c)
 {
