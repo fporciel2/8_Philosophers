@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 11:13:06 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/08 14:30:35 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/08 15:20:08 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -43,10 +43,5 @@ int	main(int argc, char **argv)
 	phi.result = phi_init(&phi, argc, argv);
 	if (phi.result < 0)
 		return (phi.result);
-	printf("\nNumber of philosophers: %lld\n\n", phi.nop);
-	printf("Time to die: %llu\n\n", phi.ttd);
-	printf("Time to eat: %llu\n\n", phi.tte);
-	printf("Time to sleep: %llu\n\n", phi.tts);
-	printf("Number of times each philosopher must eat: %lld\n\n", phi.notepme);
 	return (phi.result);
 }

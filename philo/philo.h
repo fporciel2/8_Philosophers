@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:05:21 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/08 14:10:49 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/08 15:17:06 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -32,15 +32,17 @@
 
 #ifndef PHILO_H
 # define PHILO_H
+//# define _XOPEN_SOURCE 700
+# define _DEFAULT_SOURCE
 # include <string.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <sys/time.h>
 # include <pthread.h>
+# include <stddef.h>
 # include <time.h>
 # include <sys/types.h>
-# include <stddef.h>
 
 typedef struct s_philo
 {
