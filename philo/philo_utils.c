@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philosophers.c                                     :+:      :+:    :+:   */
+/*   philo_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/08 11:13:06 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/08 13:53:21 by fporciel         ###   ########.fr       */
+/*   Created: 2023/12/08 13:45:10 by fporciel          #+#    #+#             */
+/*   Updated: 2023/12/08 13:46:54 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -30,18 +30,76 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "philo.h"
-
-int	main(int argc, char **argv)
+int	ft_isdigit(char c)
 {
-	static t_philo	phi;
+	return ((c >= 48) && (c <= 57));
+}
 
-	if ((argc < 5) || (argc > 6))
+static long long	ft_power(long long base, long long exp)
+{
+	long long	power;
+	long long	cpower;
+
+	if ((base == 0) && (exp != 0))
 		return (0);
-	argc--;
-	argv++;
-	phi.result = phi_init(&phi, argc, argv);
-	if (phi.result < 0)
-		return (phi.result);
-	return (phi.result);
+	else if (exp == 0)
+		return (1);
+	else
+	{
+		power = 1;
+		cpower = base;
+		while (exp)
+		{
+			if (exp & 1)
+				power *= cpower;
+			cpower *= cpower;
+			exp >>= 1;
+		}
+	}
+	return (power);
+}
+
+static long long	ft_chkatol(char *nptr)
+{
+	long long	i;
+
+	i = 0;
+	while (!ft_isdigit(nptr[i]) && (nptr[i] != 0))
+	{
+		if (!((nptr[i] == 43) || (nptr[i] == 45))
+			&& !((nptr[i] == 32)
+				|| ((nptr[i] >= 9) && (nptr[i] <= 13))))
+			return (0);
+		if ((nptr[i] == 45) && (ft_isdigit(nptr[i + 1])))
+			return (-1);
+		if (((nptr[i] == 43) || (nptr[i] == 45)) && (!ft_isdigit(nptr[i + 1])))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+long long	ft_atol(char *nptr)
+{
+	long long	i;
+	long long	j;
+	long long	num;
+	long long	exp;
+
+	i = 0;
+	num = 0;
+	j = 0;
+	while (!ft_isdigit(nptr[i]) && (nptr[i] != 0))
+		i++;
+	j = i;
+	while (ft_isdigit(nptr[i]))
+		i++;
+	exp = ((i - j) - 1);
+	while (j < i)
+	{
+		num = num + ((nptr[j] - 48) * ft_power(10, exp));
+		exp--;
+		j++;
+	}
+	return (num * ft_chkatol(nptr));
 }

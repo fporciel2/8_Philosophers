@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philosophers.c                                     :+:      :+:    :+:   */
+/*   philo_init.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/08 11:13:06 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/08 13:53:21 by fporciel         ###   ########.fr       */
+/*   Created: 2023/12/08 13:36:28 by fporciel          #+#    #+#             */
+/*   Updated: 2023/12/08 14:07:13 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -32,16 +32,36 @@
 
 #include "philo.h"
 
-int	main(int argc, char **argv)
+static long long	phi_check_input(char *str)
 {
-	static t_philo	phi;
+	size_t	i;
 
-	if ((argc < 5) || (argc > 6))
-		return (0);
-	argc--;
-	argv++;
-	phi.result = phi_init(&phi, argc, argv);
-	if (phi.result < 0)
-		return (phi.result);
-	return (phi.result);
+	i = 0;
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]))
+			return (-1);
+		i++;
+	}
+	return (i);
+}
+
+int	phi_init(t_philo *phi, int argc, char **argv)
+{
+	int	i;
+
+	i = 0;
+	while (argv[i])
+	{
+		if (phi_check_input(argv[i]) < 0)
+			return (-1);
+		i++;
+	}
+	if (argc == 5)
+		phi->notepme = ft_atol(argv[4]);
+	phi->nop = ft_atol(argv[0]);
+	phi->ttd = phi_atou(phi_atom(argv[1]));
+	phi->tte = phi_atou(phi_atom(argv[2]));
+	phi->tts = phi_atou(phi_atom(argv[3]));
+	return (i);
 }

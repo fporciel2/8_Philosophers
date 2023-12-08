@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:05:21 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/08 11:29:48 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/08 14:08:19 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -40,6 +40,7 @@
 # include <pthread.h>
 # include <time.h>
 # include <sys/types.h>
+# include <stddef.h>
 
 typedef struct s_philo
 {
@@ -48,6 +49,13 @@ typedef struct s_philo
 	useconds_t	tte;
 	useconds_t	tts;
 	long long	notepme;
-}	t_philo;
+	int			result;
+}				t_philo;
+
+int			phi_init(t_philo *phi, int argc, char **argv);
+int			ft_isdigit(char c);
+long long	ft_atol(char *nptr);
+useconds_t	phi_atom(char *nptr);
+useconds_t	phi_atou(useconds_t val);
 
 #endif
