@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   philosophers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/06 14:05:21 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/08 11:29:48 by fporciel         ###   ########.fr       */
+/*   Created: 2023/12/08 11:13:06 by fporciel          #+#    #+#             */
+/*   Updated: 2023/12/08 11:26:27 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -30,24 +30,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef PHILO_H
-# define PHILO_H
-# include <string.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <sys/time.h>
-# include <pthread.h>
-# include <time.h>
-# include <sys/types.h>
+#include "philo.h"
 
-typedef struct s_philo
+int	main(int argc, char **argv)
 {
-	long long	nop;
-	useconds_t	ttd;
-	useconds_t	tte;
-	useconds_t	tts;
-	long long	notepme;
-}	t_philo;
+	static t_philo	phi;
 
-#endif
+	if ((argc < 5) || (argc > 6))
+		return (0);
+}
