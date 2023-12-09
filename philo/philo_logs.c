@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 14:42:17 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/09 14:56:18 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/09 15:28:31 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -29,6 +29,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+
+#include "philo.h"
 
 int	phi_log_taken_fork(t_philo *phi, long long nop)
 {

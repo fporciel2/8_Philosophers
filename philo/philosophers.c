@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 11:13:06 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/09 14:19:19 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/09 15:27:16 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -43,7 +43,12 @@ static int	phi_start_dinner(t_philo *phi)
 	count = phi->nop;
 	while (count)
 	{
-		printf("\n%lld\n", test->id);
+		if ((phi_log_taken_fork(phi, test->id) < 0)
+			|| (phi_log_eating(phi, test->id) < 0)
+			|| (phi_log_sleeping(phi, test->id) < 0)
+			|| (phi_log_thinking(phi, test->id) < 0)
+			|| (phi_log_died(phi, test->id) < 0))
+			return (-1);
 		test = test->next;
 		count--;
 	}
