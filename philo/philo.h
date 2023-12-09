@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:05:21 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/09 13:54:21 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/09 14:45:28 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -60,6 +60,7 @@ typedef struct s_philo
 	long long		notepme;
 	int				result;
 	struct s_name	*philosophers;
+	struct timeval	tv;
 }					t_philo;
 
 int			phi_init(t_philo *phi, int argc, char **argv);
@@ -69,5 +70,10 @@ useconds_t	phi_atoitou(char *nptr);
 int			phi_sit_at_table(t_philo *phi);
 int			phi_error_sit_at_table(t_philo *phi);
 int			phi_clean_table(t_philo *phi);
+int			phi_log_taken_fork(t_philo *phi, long long nop);
+int			phi_log_eating(t_philo *phi, long long nop);
+int			phi_log_sleeping(t_philo *phi, long long nop);
+int			phi_log_thinking(t_philo *phi, long long nop);
+int			phi_log_died(t_philo *phi, long long nop);
 
 #endif
