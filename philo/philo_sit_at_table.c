@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 11:38:03 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/09 14:02:06 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/09 14:11:46 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -69,7 +69,7 @@ int	phi_sit_at_table(t_philo *phi)
 		if (iter->next == NULL)
 			return (phi_error_sit_at_table(phi));
 		iter = iter->next;
-		iter->id = i++;
+		iter->id = ++i;
 		iter->prev = previter;
 		count--;
 	}
