@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philosophers.c                                     :+:      :+:    :+:   */
+/*   philo_sit_at_table.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/08 11:13:06 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/09 11:34:39 by fporciel         ###   ########.fr       */
+/*   Created: 2023/12/09 11:38:03 by fporciel          #+#    #+#             */
+/*   Updated: 2023/12/09 12:00:19 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -32,34 +32,42 @@
 
 #include "philo.h"
 
-static int	phi_start_dinner(t_philo *phi)
+static int	phi_be_comforted(t_philo *phi, t_name *iter)
 {
-	if (phi_sit_at_table(phi) < 0)
-		return (-1);
-}
-
-static int	phi_check_input_correctness(t_philo *phi, int argc)
-{
-	if ((phi->nop == 0) || (phi->ttd == 0) || (phi->tte == 0) || (phi->tts == 0))
-		return (0);
-	if (argc == 5)
+	if (phi->nop > 1)
 	{
-		if (phi->notepme == 0)
-			return (0);
+		iter->next = phi->philosophers;
+		phi->philosophers->prev = iter;
+	}
+	else
+	{
+		phi->philosophers->prev = NULL;
+		phi->philosophers->next = NULL;
 	}
 	return (1);
 }
 
-int	main(int argc, char **argv)
+int	phi_sit_at_table(t_philo *phi)
 {
-	static t_philo	phi;
+	long long	count;
+	t_name		*iter;
+	t_name		*previter;
 
-	if ((argc < 5) || (argc > 6))
-		return (0);
-	argc--;
-	argv++;
-	phi.result = phi_init(&phi, argc, argv);
-	if ((phi.result < 0) || (!phi_check_input_correctness(&phi, argc)))
-		return (phi.result);
-	return (phi_start_dinner(&phi));
+	count = phi->nop;
+	phi->philosophers = (t_name *)malloc(sizeof(t_name));
+	if (phi->philosophers == NULL)
+		return (-1);
+	iter = phi->philosophers;
+	count--;
+	while (count != 0)
+	{
+		previter = iter;
+		iter->next = (t_name *)malloc(sizeof(t_name));
+		if (iter->next == NULL)
+			return (phi_error_sit_at_table(phi, count));
+		iter = iter->next;
+		iter->prev = previter;
+		count--;
+	}
+	return (phi_be_comforted(phi, iter));
 }

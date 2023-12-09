@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:05:21 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/08 15:17:06 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/09 11:45:25 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -32,7 +32,6 @@
 
 #ifndef PHILO_H
 # define PHILO_H
-//# define _XOPEN_SOURCE 700
 # define _DEFAULT_SOURCE
 # include <string.h>
 # include <stdio.h>
@@ -44,19 +43,29 @@
 # include <time.h>
 # include <sys/types.h>
 
+typedef struct s_name
+{
+	pthread_t		thread;
+	long long		id;
+	struct s_name	*prev;
+	struct s_name	*next;
+}					t_name;
+
 typedef struct s_philo
 {
-	long long	nop;
-	useconds_t	ttd;
-	useconds_t	tte;
-	useconds_t	tts;
-	long long	notepme;
-	int			result;
-}				t_philo;
+	long long		nop;
+	useconds_t		ttd;
+	useconds_t		tte;
+	useconds_t		tts;
+	long long		notepme;
+	int				result;
+	struct s_name	*philosophers;
+}					t_philo;
 
 int			phi_init(t_philo *phi, int argc, char **argv);
 int			ft_isdigit(char c);
 long long	ft_atol(char *nptr);
 useconds_t	phi_atoitou(char *nptr);
+int			phi_sit_at_table(t_philo *phi);
 
 #endif
