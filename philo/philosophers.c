@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 11:13:06 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/09 14:07:03 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/09 14:07:56 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -47,7 +47,7 @@ static int	phi_start_dinner(t_philo *phi)
 		test = test->next;
 		count--;
 	}
-	return (phi_clean_table(t_philo *phi));
+	return (phi_clean_table(phi));
 }
 
 static int	phi_check_input_correctness(t_philo *phi, int argc)
