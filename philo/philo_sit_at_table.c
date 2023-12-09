@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 11:38:03 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/09 12:00:19 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/09 14:02:06 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -52,20 +52,24 @@ int	phi_sit_at_table(t_philo *phi)
 	long long	count;
 	t_name		*iter;
 	t_name		*previter;
+	long long	i;
 
 	count = phi->nop;
+	i = 1;
 	phi->philosophers = (t_name *)malloc(sizeof(t_name));
 	if (phi->philosophers == NULL)
 		return (-1);
 	iter = phi->philosophers;
+	iter->id = i;
 	count--;
 	while (count != 0)
 	{
 		previter = iter;
 		iter->next = (t_name *)malloc(sizeof(t_name));
 		if (iter->next == NULL)
-			return (phi_error_sit_at_table(phi, count));
+			return (phi_error_sit_at_table(phi));
 		iter = iter->next;
+		iter->id = i++;
 		iter->prev = previter;
 		count--;
 	}

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   philo_error_sit_at_table.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/06 14:05:21 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/09 13:54:21 by fporciel         ###   ########.fr       */
+/*   Created: 2023/12/09 13:42:57 by fporciel          #+#    #+#             */
+/*   Updated: 2023/12/09 13:52:03 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -30,44 +30,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef PHILO_H
-# define PHILO_H
-# define _DEFAULT_SOURCE
-# include <string.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <sys/time.h>
-# include <pthread.h>
-# include <stddef.h>
-# include <time.h>
-# include <sys/types.h>
+#include "philo.h"
 
-typedef struct s_name
+int	phi_error_sit_at_table(t_philo *phi)
 {
-	pthread_t		thread;
-	long long		id;
-	struct s_name	*prev;
-	struct s_name	*next;
-}					t_name;
+	t_name	*i;
+	t_name	*j;
 
-typedef struct s_philo
-{
-	long long		nop;
-	useconds_t		ttd;
-	useconds_t		tte;
-	useconds_t		tts;
-	long long		notepme;
-	int				result;
-	struct s_name	*philosophers;
-}					t_philo;
-
-int			phi_init(t_philo *phi, int argc, char **argv);
-int			ft_isdigit(char c);
-long long	ft_atol(char *nptr);
-useconds_t	phi_atoitou(char *nptr);
-int			phi_sit_at_table(t_philo *phi);
-int			phi_error_sit_at_table(t_philo *phi);
-int			phi_clean_table(t_philo *phi);
-
-#endif
+	i = phi->philosophers;
+	while (i != NULL)
+	{
+		j = i->next;
+		free(i);
+		i = j;
+	}
+	return (-1);
+}
