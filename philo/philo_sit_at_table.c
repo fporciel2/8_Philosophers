@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 11:38:03 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/09 14:11:46 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/12 11:25:18 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -32,6 +32,31 @@
 
 #include "philo.h"
 
+static int	phi_init_threads(t_philo *phi)
+{
+	t_name	*tmp;
+
+	tmp = phi->philosophers;
+	if (pthread_create(&(tmp->thread), NULL, phi_routine, (void *)tmp) != 0)
+	{
+		tmp->active = 0;
+		return (phi_pthread_create_failure(phi));
+	}
+	tmp->active = 1;
+	tmp = tmp->next;
+	while (tmp && (tmp != phi->philosophers))
+	{
+		if (pthread_create(&(tmp->thread), NULL, phi_routine, (void *)tmp) != 0)
+		{
+			tmp->active = 0;
+			return (phi_pthread_create_failure(phi));
+		}
+		tmp->active = 1;
+		tmp = tmp->next;
+	}
+	return (1);
+}
+
 static int	phi_be_comforted(t_philo *phi, t_name *iter)
 {
 	if (phi->nop > 1)
@@ -44,7 +69,7 @@ static int	phi_be_comforted(t_philo *phi, t_name *iter)
 		phi->philosophers->prev = NULL;
 		phi->philosophers->next = NULL;
 	}
-	return (1);
+	return (phi_init_threads(phi));
 }
 
 int	phi_sit_at_table(t_philo *phi)
