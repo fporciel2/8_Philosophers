@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 11:38:03 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/12 11:25:18 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/12 13:46:30 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -37,7 +37,8 @@ static int	phi_init_threads(t_philo *phi)
 	t_name	*tmp;
 
 	tmp = phi->philosophers;
-	if (pthread_create(&(tmp->thread), NULL, phi_routine, (void *)tmp) != 0)
+	if ((pthread_create(&(tmp->thread), NULL, phi_routine, (void *)tmp) != 0)
+		|| (pthread_join(tmp->thread, NULL) != 0))
 	{
 		tmp->active = 0;
 		return (phi_pthread_create_failure(phi));
@@ -46,7 +47,8 @@ static int	phi_init_threads(t_philo *phi)
 	tmp = tmp->next;
 	while (tmp && (tmp != phi->philosophers))
 	{
-		if (pthread_create(&(tmp->thread), NULL, phi_routine, (void *)tmp) != 0)
+		if ((pthread_create(&(tmp->thread), NULL, phi_routine, (void *)tmp) != 0)
+			|| (pthread_join(tmp->thread, NULL) != 0))
 		{
 			tmp->active = 0;
 			return (phi_pthread_create_failure(phi));

@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 11:13:06 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/12 13:37:12 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/12 13:44:05 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -34,22 +34,8 @@
 
 static int	phi_start_dinner(t_philo *phi)
 {
-	t_name		*test;
-
 	if (phi_sit_at_table(phi) < 0)
 		return (-1);
-	test = phi->philosophers;
-	//if (pthread_join(test->thread, NULL) != 0)
-		//return (phi_clean_table(phi));
-	printf("\nThis thread is not executing with ID %lld\n", test->id);
-	test = test->next;
-	while (test && (test != phi->philosophers))
-	{
-		//if (pthread_join(test->thread, NULL) != 0)
-			//return (phi_clean_table(phi));
-		printf("\nThis thread is not executing with ID %lld\n", test->id);
-		test = test->next;
-	}
 	return (phi_clean_table(phi));
 }
 
