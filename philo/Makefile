@@ -6,7 +6,7 @@
 #    By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/06 13:45:55 by fporciel          #+#    #+#              #
-#    Updated: 2023/12/09 15:01:38 by fporciel         ###   ########.fr        #
+#    Updated: 2023/12/12 14:58:38 by fporciel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 # 'Philosophers' is a simulation program that explores concurrent programming
@@ -32,7 +32,7 @@
 #- fporciel@student.42roma.it
 #
 
-.PHONY: all autogit
+.PHONY: all autogit memcheck helgrind
 .DEFAULT_GOAL: all
 NAME := philo
 DIR := $(shell pwd)
@@ -56,4 +56,16 @@ $(OBJS): $(SRCS) $(HDR)
 
 autogit:
 	cd .. && make autogit && cd philo
+
+memcheck:
+	@echo "\nPlease, enter your input to test:"
+	@read input; \
+		valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
+		--show-error-list=yes -s -v ./philo $$input
+
+helgrind:
+	@echo "\nPlease, enter your input to test:"
+	@read input; \
+		valgrind --tool=helgrind --history-level=full --read-var-info=yes \
+		-s ./philo $$input
 

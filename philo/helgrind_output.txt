@@ -1,0 +1,9 @@
+==326892== Helgrind, a thread error detector
+==326892== Copyright (C) 2007-2017, and GNU GPL'd, by OpenWorks LLP et al.
+==326892== Using Valgrind-3.21.0 and LibVEX; rerun with -h for copyright info
+==326892== Command: ./philo 10 9 8 7
+==326892== 
+==326892== 
+==326892== Use --history-level=approx or =none to gain increased speed, at
+==326892== the cost of reduced accuracy of conflicting-access information
+==326892== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
