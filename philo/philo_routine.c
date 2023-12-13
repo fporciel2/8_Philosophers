@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 11:04:10 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/12 11:24:34 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/13 15:09:32 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -34,7 +34,13 @@
 
 void	*phi_routine(void *philo)
 {
-	printf("\nThis thread is executing with ID %lld\n", ((t_name *)philo)->id);
+	printf("\nThis thread is executing with ID %lld\n",
+			((t_name *)philo)->id);
+	printf("FORK: %d\nNOP: %lld\nTTD: %u\nTTE: %u\nTTS: %u\nNOTEPME: %lld\n",
+			((t_name *)philo)->fork, ((t_name *)philo)->nop, 
+			((t_name *)philo)->ttd, 
+			((t_name *)philo)->tte,
+			((t_name *)philo)->tts, ((t_name *)philo)->notepme);
 	((t_name *)philo)->active = 0;
 	return (NULL);
 }
