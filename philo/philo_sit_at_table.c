@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 11:38:03 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/12 13:46:30 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/13 14:55:10 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -32,28 +32,22 @@
 
 #include "philo.h"
 
-static int	phi_init_threads(t_philo *phi)
+static int	phi_assign_values(t_name *head, t_philo *phi)
 {
-	t_name	*tmp;
+	unsigned long long	i;
+	t_name				*tmp;
 
-	tmp = phi->philosophers;
-	if ((pthread_create(&(tmp->thread), NULL, phi_routine, (void *)tmp) != 0)
-		|| (pthread_join(tmp->thread, NULL) != 0))
+	i = 0;
+	tmp = head;
+	while ((tmp && (tmp != head)) || (i == 0))
 	{
-		tmp->active = 0;
-		return (phi_pthread_create_failure(phi));
-	}
-	tmp->active = 1;
-	tmp = tmp->next;
-	while (tmp && (tmp != phi->philosophers))
-	{
-		if ((pthread_create(&(tmp->thread), NULL, phi_routine, (void *)tmp) != 0)
-			|| (pthread_join(tmp->thread, NULL) != 0))
-		{
-			tmp->active = 0;
-			return (phi_pthread_create_failure(phi));
-		}
-		tmp->active = 1;
+		tmp->fork = 0;
+		tmp->nop = phi->nop;
+		tmp->ttd = phi->ttd;
+		tmp->tte = phi->tte;
+		tmp->tts = phi->tts;
+		tmp->notepme = phi->notepme;
+		i++;
 		tmp = tmp->next;
 	}
 	return (1);
@@ -71,7 +65,7 @@ static int	phi_be_comforted(t_philo *phi, t_name *iter)
 		phi->philosophers->prev = NULL;
 		phi->philosophers->next = NULL;
 	}
-	return (phi_init_threads(phi));
+	return (phi_assign_values(phi->philosophers, phi));
 }
 
 int	phi_sit_at_table(t_philo *phi)

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philosophers.c                                     :+:      :+:    :+:   */
+/*   philo_init_threads.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: fporciel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/08 11:13:06 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/13 14:42:35 by fporciel         ###   ########.fr       */
+/*   Created: 2023/12/13 14:39:55 by fporciel          #+#    #+#             */
+/*   Updated: 2023/12/13 14:41:02 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -32,35 +32,29 @@
 
 #include "philo.h"
 
-static int	phi_start_dinner(t_philo *phi)
+int	phi_init_threads(t_philo *phi)
 {
-	if ((phi_sit_at_table(phi) < 0) || (phi_init_threads(phi) < 0))
-		return (-1);
-	return (phi_clean_table(phi));
-}
+	t_name	*tmp;
 
-static int	phi_check_input_correctness(t_philo *phi, int argc)
-{
-	if ((phi->nop == 0) || (phi->ttd == 0) || (phi->tte == 0) || (phi->tts == 0))
-		return (0);
-	if (argc == 5)
+	tmp = phi->philosophers;
+	if ((pthread_create(&(tmp->thread), NULL, phi_routine, (void *)tmp) != 0)
+		|| (pthread_join(tmp->thread, NULL) != 0))
 	{
-		if (phi->notepme == 0)
-			return (0);
+		tmp->active = 0;
+		return (phi_pthread_create_failure(phi));
+	}
+	tmp->active = 1;
+	tmp = tmp->next;
+	while (tmp && (tmp != phi->philosophers))
+	{
+		if ((pthread_create(&(tmp->thread), NULL, phi_routine, (void *)tmp) != 0)
+			|| (pthread_join(tmp->thread, NULL) != 0))
+		{
+			tmp->active = 0;
+			return (phi_pthread_create_failure(phi));
+		}
+		tmp->active = 1;
+		tmp = tmp->next;
 	}
 	return (1);
-}
-
-int	main(int argc, char **argv)
-{
-	static t_philo	phi;
-
-	if ((argc < 5) || (argc > 6))
-		return (0);
-	argc--;
-	argv++;
-	phi.result = phi_init(&phi, argc, argv);
-	if ((phi.result < 0) || (!phi_check_input_correctness(&phi, argc)))
-		return (phi.result);
-	return (phi_start_dinner(&phi));
 }
