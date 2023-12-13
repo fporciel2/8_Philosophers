@@ -6,7 +6,7 @@
 #    By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/06 13:45:55 by fporciel          #+#    #+#              #
-#    Updated: 2023/12/12 14:58:38 by fporciel         ###   ########.fr        #
+#    Updated: 2023/12/13 16:27:47 by fporciel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 # 'Philosophers' is a simulation program that explores concurrent programming
@@ -32,7 +32,7 @@
 #- fporciel@student.42roma.it
 #
 
-.PHONY: all autogit memcheck helgrind
+.PHONY: all autogit memcheck helgrind drd
 .DEFAULT_GOAL: all
 NAME := philo
 DIR := $(shell pwd)
@@ -69,3 +69,8 @@ helgrind:
 		valgrind --tool=helgrind --history-level=full --read-var-info=yes \
 		-s ./philo $$input
 
+drd:
+	@echo "\nPlease, enter your input to test:"
+	@read input; \
+		valgrind --tool=drd --check-stack-var=yes --show-stack-usage=yes \
+		./philo $$input
