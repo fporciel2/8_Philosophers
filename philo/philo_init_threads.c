@@ -6,7 +6,7 @@
 /*   By: fporciel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 14:39:55 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/13 14:41:02 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/13 15:24:57 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -47,7 +47,8 @@ int	phi_init_threads(t_philo *phi)
 	tmp = tmp->next;
 	while (tmp && (tmp != phi->philosophers))
 	{
-		if ((pthread_create(&(tmp->thread), NULL, phi_routine, (void *)tmp) != 0)
+		if ((pthread_create(&(tmp->thread), NULL,
+					phi_routine, (void *)tmp) != 0)
 			|| (pthread_join(tmp->thread, NULL) != 0))
 		{
 			tmp->active = 0;
