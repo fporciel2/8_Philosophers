@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 13:42:57 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/09 13:52:03 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/14 10:54:30 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -40,6 +40,7 @@ int	phi_error_sit_at_table(t_philo *phi)
 	i = phi->philosophers;
 	while (i != NULL)
 	{
+		pthread_mutex_destroy(&(i->fork));
 		j = i->next;
 		free(i);
 		i = j;

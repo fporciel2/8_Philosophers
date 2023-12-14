@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:05:21 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/14 09:59:17 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/14 10:48:44 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -49,7 +49,7 @@ typedef struct s_name
 	pthread_mutex_t	*lock;
 	long long		id;
 	int				active;
-	long long		fork;
+	pthread_mutex_t	fork;
 	long long		nop;
 	useconds_t		ttd;
 	useconds_t		tte;
