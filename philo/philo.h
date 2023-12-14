@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:05:21 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/13 14:46:22 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/14 09:59:17 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -46,9 +46,10 @@
 typedef struct s_name
 {
 	pthread_t		thread;
+	pthread_mutex_t	*lock;
 	long long		id;
 	int				active;
-	int				fork;
+	long long		fork;
 	long long		nop;
 	useconds_t		ttd;
 	useconds_t		tte;
@@ -60,6 +61,7 @@ typedef struct s_name
 
 typedef struct s_philo
 {
+	pthread_mutex_t	lock;
 	long long		nop;
 	useconds_t		ttd;
 	useconds_t		tte;

@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 11:13:06 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/13 15:23:28 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/14 10:05:29 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -34,8 +34,9 @@
 
 static int	phi_start_dinner(t_philo *phi)
 {
-	if ((phi_sit_at_table(phi) < 0) || (phi_init_threads(phi) < 0))
-		return (-1);
+	if ((pthread_mutex_init(&(phi->lock), NULL) != 0)
+		|| (phi_sit_at_table(phi) < 0) || (phi_init_threads(phi) < 0))
+		return (pthread_mutex_destroy(&(phi->lock)));
 	return (phi_clean_table(phi));
 }
 

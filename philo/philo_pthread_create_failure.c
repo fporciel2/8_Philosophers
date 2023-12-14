@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 10:52:24 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/12 11:02:31 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/14 10:29:26 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -37,10 +37,19 @@ int	phi_pthread_create_failure(t_philo *phi)
 	t_name	*tmp;
 
 	tmp = phi->philosophers;
-	while (tmp->active != 0)
+	if (tmp->active != 0)
 	{
 		if (pthread_detach(tmp->thread) != 0)
 			printf("Warning: cannot detach philosopher %lld!\n\n", tmp->id);
+	}
+	tmp = tmp->next;
+	while (tmp && (tmp != phi->philosophers))
+	{
+		if (tmp->active != 0)
+		{
+			if (pthread_detach(tmp->thread) != 0)
+				printf("Warning: cannot detach philosopher %lld!\n\n", tmp->id);
+		}
 		tmp = tmp->next;
 	}
 	return (phi_error_sit_at_table(phi));
