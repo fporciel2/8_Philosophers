@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 11:04:10 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/13 15:25:43 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/15 15:29:22 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -32,8 +32,31 @@
 
 #include "philo.h"
 
+static void	*phi_notepme_routine(t_name *philo)
+{
+}
+
+static void	*phi_normal_routine(t_name *philo)
+{
+	unsigned long long	time;
+	
+	while (1)
+	{
+		if (gettimeofday(&(philo->tv), NULL) < 0)
+			return (phi_gettime_routine_failure(philo));
+	}
+}
+
 void	*phi_routine(void *philo)
 {
-	((t_name *)philo)->active = 0;
-	return (NULL);
+	if (pthread_create(&(((t_name *)philo)->supervisor), NULL,
+				phi_supervisor, philo) != 0)
+		return ((void *)phi_suprevisor_start_failure((t_name *)philo));
+	if (pthread_create(&(((t_name *)philo)->monitor), NULL,
+				phi_monitor, philo) != 0)
+		return ((void *)phi_monitor_start_failure((t_name *)philo));
+	if ((((t_name *)philo)->notepme) < 0)
+		return (phi_normal_routine((t_name *)philo));
+	else
+		return (phi_notepme_routine((t_name *)philo));
 }

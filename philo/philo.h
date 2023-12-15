@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:05:21 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/14 10:48:44 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/15 15:30:03 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -46,15 +46,20 @@
 typedef struct s_name
 {
 	pthread_t		thread;
+	pthread_t		supervisor;
+	pthread_t		monitor;
 	pthread_mutex_t	*lock;
 	long long		id;
 	int				active;
 	pthread_mutex_t	fork;
+	int				fork_value;
+	int				isalive;
 	long long		nop;
 	useconds_t		ttd;
 	useconds_t		tte;
 	useconds_t		tts;
 	long long		notepme;
+	struct timeval	tv;
 	struct s_name	*prev;
 	struct s_name	*next;
 }					t_name;
@@ -87,5 +92,10 @@ int			phi_log_died(t_philo *phi, long long nop);
 void		*phi_routine(void *philo);
 int			phi_init_threads(t_philo *phi);
 int			phi_pthread_create_failure(t_philo *phi);
+void		*phi_supervisor(void *philo);
+void		*phi_monitor(void *philo);
+int			phi_supervisor_start_failure(t_name *philo);
+int			phi_monitor_start_failure(t_name *philo);
+void		*phi_gettime_routine_failure(t_name *philo);
 
 #endif
