@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 14:42:17 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/09 15:28:31 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/16 14:44:35 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -76,7 +76,7 @@ int	phi_log_thinking(t_philo *phi, long long nop)
 	return (printf("\n%llu %lld is thinking", tmstmp, nop));
 }
 
-int	phi_log_died(t_philo *phi, long long nop)
+int	phi_log_dead(t_philo *phi, long long nop)
 {
 	unsigned long long	tmstmp;
 

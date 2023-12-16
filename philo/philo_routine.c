@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 11:04:10 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/16 13:56:49 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/16 14:23:32 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -101,7 +101,7 @@ static void	*phi_notepme_routine(t_name *philo)
 		if (phi_continue_routine(philo) < 0)
 			return (NULL);
 	}
-	return (NULL);
+	return ((void *)pthread_detach(philo->supervisor));
 }
 
 static void	*phi_normal_routine(t_name *philo)
@@ -130,7 +130,7 @@ static void	*phi_normal_routine(t_name *philo)
 		if (phi_continue_routine(philo) < 0)
 			return (NULL);
 	}
-	return (NULL);
+	return ((void *)pthread_detach(philo->supervisor));
 }
 
 void	*phi_routine(void *philo)
@@ -145,7 +145,7 @@ void	*phi_routine(void *philo)
 	else
 	{
 		if (pthread_create(&(((t_name *)philo)->supervisor), NULL,
-				phi_notepme_supervisor, (void *)philo) != 0)
+				phi_supervisor, (void *)philo) != 0)
 			return (NULL);
 		return (phi_notepme_routine((t_name *)philo));
 	}
