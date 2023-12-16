@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:05:21 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/16 12:50:19 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/16 13:27:09 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -47,7 +47,6 @@ typedef struct s_name
 {
 	pthread_t			thread;
 	pthread_t			supervisor;
-	pthread_t			monitor;
 	pthread_mutex_t		*lock;
 	pthread_mutex_t		ulock;
 	void				*phi;
@@ -100,28 +99,5 @@ int			phi_init_threads(t_philo *phi);
 int			phi_pthread_create_failure(t_philo *phi);
 void		*phi_supervisor(void *philo);
 void		*phi_notepme_supervisor(void *philo);
-void		*phi_monitor(void *philo);
-void		*phi_supervisor_start_failure(t_name *philo);
-void		*phi_mutex_lock_failure(t_name *philo);
-void		*phi_mutex_unlock_failure(t_name *philo);
-void		*phi_mutex_pfork_failure(t_name *philo);
-void		*phi_log_tfork1_failure(t_name *philo);
-void		*phi_mutex_nfork_failure(t_name *philo);
-void		*phi_mutex_lock1_failure(t_name *philo);
-void		*phi_mutex_tfork2_failure(t_name *philo);
-void		*phi_mutex_unlock1_failure(t_name *philo);
-int			phi_mutex_lock2_failure(t_name *philo);
-int			phi_log_eating_failure(t_name *philo);
-int			phi_mutex_unlock2_failure(t_name *philo);
-int			phi_tte_failure(t_name *philo);
-int			phi_mutex_dpfork_failure(t_name *philo);
-int			phi_mutex_dnfork_failure(t_name *philo);
-int			phi_mutex_lock3_failure(t_name *philo);
-int			phi_log_sleeping_failure(t_name *philo);
-int			phi_mutex_unlock3_failure(t_name *philo);
-int			phi_tts_failure(t_name *philo);
-int			phi_mutex_lock4_failure(t_name *philo);
-int			phi_log_thinking_failure(t_name *philo);
-int			phi_mutex_unlock4_failure(t_name *philo);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 11:04:10 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/16 13:08:38 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/16 13:56:49 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -35,42 +35,42 @@
 static int	phi_end_routine(t_name *philo)
 {
 	if (pthread_mutex_unlock(philo->lock) != 0)
-		return (phi_mutex_unlock3_failure(philo));
+		return (pthread_detach(philo->supervisor), -1);
 	if (usleep(philo->tts) < 0)
-		return (phi_tts_failure(philo));
+		return (pthread_detach(philo->supervisor), -1);
 	if (pthread_mutex_lock(philo->lock) != 0)
-		return (phi_mutex_lock4_failure(philo));
+		return (pthread_detach(philo->supervisor), -1);
 	philo->issleeping = 0;
 	if (phi_log_thinking((t_philo *)(philo->phi), philo->id) < 0)
-		return (phi_log_thinking_failure(philo));
+		return (pthread_detach(philo->supervisor), -1);
 	philo->isthinking = 1;
 	if (pthread_mutex_unlock(philo->lock) != 0)
-		return (phi_mutex_unlock4_failure(philo));
+		return (pthread_detach(philo->supervisor), -1);
 	return (1);
 }
 
 static int	phi_continue_routine(t_name *philo)
 {
 	if (pthread_mutex_lock(philo->lock) != 0)
-		return (phi_mutex_lock2_failure(philo));
+		return (pthread_detach(philo->supervisor), -1);
 	if (phi_log_eating((t_philo *)(philo->phi), philo->id) < 0)
-		return (phi_log_eating_failure(philo));
+		return (pthread_detach(philo->supervisor), -1);
 	philo->iseating = 1;
 	if (pthread_mutex_unlock(philo->lock) != 0)
-		return (phi_mutex_unlock2_failure(philo));
+		return (pthread_detach(philo->supervisor), -1);
 	if (usleep(philo->tte) < 0)
-		return (phi_tte_failure(philo));
+		return (pthread_detach(philo->supervisor), -1);
 	if (pthread_mutex_unlock(&(philo->next->fork)) != 0)
-		return (phi_mutex_dpfork_failure(philo));
+		return (pthread_detach(philo->supervisor), -1);
 	philo->hasnfork = 0;
 	if (pthread_mutex_unlock(&(philo->prev->fork)) != 0)
-		return (phi_mutex_dnfork_failure(philo));
+		return (pthread_detach(philo->supervisor), -1);
 	philo->haspfork = 0;
 	if (pthread_mutex_lock(philo->lock) != 0)
-		return (phi_mutex_lock3_failure(philo));
+		return (pthread_detach(philo->supervisor), -1);
 	philo->iseating = 0;
 	if (phi_log_sleeping((t_philo *)(philo->phi), philo->id) < 0)
-		return (phi_log_sleeping_failure(philo));
+		return (pthread_detach(philo->supervisor), -1);
 	philo->issleeping = 1;
 	return (phi_end_routine(philo));
 }
@@ -80,24 +80,24 @@ static void	*phi_notepme_routine(t_name *philo)
 	while ((philo->i)++ < philo->notepme)
 	{
 		if (pthread_mutex_lock(&(philo->prev->fork)) != 0)
-			return (phi_mutex_pfork1_failure(philo));
+			return ((void *)pthread_detach(philo->supervisor));
 		philo->isthinking = 0;
 		if (pthread_mutex_lock(philo->lock) != 0)
-			return (phi_mutex_lock_failure(philo));
+			return ((void *)pthread_detach(philo->supervisor));
 		if (phi_log_taken_fork((t_philo *)(philo->phi), philo->id) < 0)
-			return (phi_log_tfork1_failure(philo));
+			return ((void *)pthread_detach(philo->supervisor));
 		philo->haspfork = 1;
 		if (pthread_mutex_unlock(philo->lock) != 0)
-			return (phi_mutex_unlock_failure(philo));
+			return ((void *)pthread_detach(philo->supervisor));
 		if (pthread_mutex_lock(&(philo->next->fork)) != 0)
-			return (phi_mutex_pfork2_failure(philo));
+			return ((void *)pthread_detach(philo->supervisor));
 		if (pthread_mutex_lock(philo->lock) != 0)
-			return (phi_mutex_lock1_failure(philo));
+			return ((void *)pthread_detach(philo->supervisor));
 		if (phi_log_taken_fork((t_philo *)(philo->phi), philo->id) < 0)
-			return (phi_mutex_tfork2_failure(philo));
+			return ((void *)pthread_detach(philo->supervisor));
 		philo->hasnfork = 1;
 		if (pthread_mutex_unlock(philo->lock) != 0)
-			return (phi_mutex_unlock1_failure(philo));
+			return ((void *)pthread_detach(philo->supervisor));
 		if (phi_continue_routine(philo) < 0)
 			return (NULL);
 	}
@@ -109,24 +109,24 @@ static void	*phi_normal_routine(t_name *philo)
 	while (1)
 	{
 		if (pthread_mutex_lock(&(philo->prev->fork)) != 0)
-			return (phi_mutex_pfork1_failure(philo));
+			return ((void *)pthread_detach(philo->supervisor));
 		philo->isthinking = 0;
 		if (pthread_mutex_lock(philo->lock) != 0)
-			return (phi_mutex_lock_failure(philo));
+			return ((void *)pthread_detach(philo->supervisor));
 		if (phi_log_taken_fork((t_philo *)(philo->phi), philo->id) < 0)
-			return (phi_log_tfork1_failure(philo));
+			return ((void *)pthread_detach(philo->supervisor));
 		philo->haspfork = 1;
 		if (pthread_mutex_unlock(philo->lock) != 0)
-			return (phi_mutex_unlock_failure(philo));
+			return ((void *)pthread_detach(philo->supervisor));
 		if (pthread_mutex_lock(&(philo->next->fork)) != 0)
-			return (phi_mutex_pfork2_failure(philo));
+			return ((void *)pthread_detach(philo->supervisor));
 		if (pthread_mutex_lock(philo->lock) != 0)
-			return (phi_mutex_lock1_failure(philo));
+			return ((void *)pthread_detach(philo->supervisor));
 		if (phi_log_taken_fork((t_philo *)(philo->phi), philo->id) < 0)
-			return (phi_mutex_tfork2_failure(philo));
+			return ((void *)pthread_detach(philo->supervisor));
 		philo->hasnfork = 1;
 		if (pthread_mutex_unlock(philo->lock) != 0)
-			return (phi_mutex_unlock1_failure(philo));
+			return ((void *)pthread_detach(philo->supervisor));
 		if (phi_continue_routine(philo) < 0)
 			return (NULL);
 	}
@@ -139,13 +139,14 @@ void	*phi_routine(void *philo)
 	{
 		if (pthread_create(&(((t_name *)philo)->supervisor), NULL,
 				phi_supervisor, (void *)philo) != 0)
-			return (phi_suprevisor_start_failure((t_name *)philo));
+			return (NULL);
 		return (phi_normal_routine((t_name *)philo));
 	}
 	else
 	{
 		if (pthread_create(&(((t_name *)philo)->supervisor), NULL,
 				phi_notepme_supervisor, (void *)philo) != 0)
-			return (phi_notepme_routine((t_name *)philo));
+			return (NULL);
+		return (phi_notepme_routine((t_name *)philo));
 	}
 }
