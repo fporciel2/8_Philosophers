@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 11:04:10 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/16 14:23:32 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/16 15:09:37 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -80,28 +80,28 @@ static void	*phi_notepme_routine(t_name *philo)
 	while ((philo->i)++ < philo->notepme)
 	{
 		if (pthread_mutex_lock(&(philo->prev->fork)) != 0)
-			return ((void *)pthread_detach(philo->supervisor));
+			return (pthread_detach(philo->supervisor), NULL);
 		philo->isthinking = 0;
 		if (pthread_mutex_lock(philo->lock) != 0)
-			return ((void *)pthread_detach(philo->supervisor));
+			return (pthread_detach(philo->supervisor), NULL);
 		if (phi_log_taken_fork((t_philo *)(philo->phi), philo->id) < 0)
-			return ((void *)pthread_detach(philo->supervisor));
+			return (pthread_detach(philo->supervisor), NULL);
 		philo->haspfork = 1;
 		if (pthread_mutex_unlock(philo->lock) != 0)
-			return ((void *)pthread_detach(philo->supervisor));
+			return (pthread_detach(philo->supervisor), NULL);
 		if (pthread_mutex_lock(&(philo->next->fork)) != 0)
-			return ((void *)pthread_detach(philo->supervisor));
+			return (pthread_detach(philo->supervisor), NULL);
 		if (pthread_mutex_lock(philo->lock) != 0)
-			return ((void *)pthread_detach(philo->supervisor));
+			return (pthread_detach(philo->supervisor), NULL);
 		if (phi_log_taken_fork((t_philo *)(philo->phi), philo->id) < 0)
-			return ((void *)pthread_detach(philo->supervisor));
+			return (pthread_detach(philo->supervisor), NULL);
 		philo->hasnfork = 1;
 		if (pthread_mutex_unlock(philo->lock) != 0)
-			return ((void *)pthread_detach(philo->supervisor));
+			return (pthread_detach(philo->supervisor), NULL);
 		if (phi_continue_routine(philo) < 0)
 			return (NULL);
 	}
-	return ((void *)pthread_detach(philo->supervisor));
+	return (pthread_detach(philo->supervisor), NULL);
 }
 
 static void	*phi_normal_routine(t_name *philo)
@@ -109,28 +109,28 @@ static void	*phi_normal_routine(t_name *philo)
 	while (1)
 	{
 		if (pthread_mutex_lock(&(philo->prev->fork)) != 0)
-			return ((void *)pthread_detach(philo->supervisor));
+			return (pthread_detach(philo->supervisor), NULL);
 		philo->isthinking = 0;
 		if (pthread_mutex_lock(philo->lock) != 0)
-			return ((void *)pthread_detach(philo->supervisor));
+			return (pthread_detach(philo->supervisor), NULL);
 		if (phi_log_taken_fork((t_philo *)(philo->phi), philo->id) < 0)
-			return ((void *)pthread_detach(philo->supervisor));
+			return (pthread_detach(philo->supervisor), NULL);
 		philo->haspfork = 1;
 		if (pthread_mutex_unlock(philo->lock) != 0)
-			return ((void *)pthread_detach(philo->supervisor));
+			return (pthread_detach(philo->supervisor), NULL);
 		if (pthread_mutex_lock(&(philo->next->fork)) != 0)
-			return ((void *)pthread_detach(philo->supervisor));
+			return (pthread_detach(philo->supervisor), NULL);
 		if (pthread_mutex_lock(philo->lock) != 0)
-			return ((void *)pthread_detach(philo->supervisor));
+			return (pthread_detach(philo->supervisor), NULL);
 		if (phi_log_taken_fork((t_philo *)(philo->phi), philo->id) < 0)
-			return ((void *)pthread_detach(philo->supervisor));
+			return (pthread_detach(philo->supervisor), NULL);
 		philo->hasnfork = 1;
 		if (pthread_mutex_unlock(philo->lock) != 0)
-			return ((void *)pthread_detach(philo->supervisor));
+			return (pthread_detach(philo->supervisor), NULL);
 		if (phi_continue_routine(philo) < 0)
 			return (NULL);
 	}
-	return ((void *)pthread_detach(philo->supervisor));
+	return (pthread_detach(philo->supervisor), NULL);
 }
 
 void	*phi_routine(void *philo)

@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/16 14:02:02 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/16 14:50:57 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/16 15:13:12 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -59,7 +59,7 @@ void	*phi_supervisor(void *philo)
 	while (1)
 	{
 		if (gettimeofday(&(p->tv), NULL) < 0)
-			return ((void *)pthread_detach(p->thread));
+			return (pthread_detach(p->thread), NULL);
 		start = (unsigned long long)(p->tv.tv_sec) * 1000
 			+ (unsigned long long)(p->tv.tv_usec) / 1000;
 		if (phi_supervisor_loop(p, start) < 0)
@@ -67,7 +67,7 @@ void	*phi_supervisor(void *philo)
 		if ((p->issleeping == 1) || (p->isthinking == 1) || (p->iseating == 0))
 		{
 			pthread_detach(p->thread);
-			return ((void *)phi_log_dead((t_philo *)(p->phi), p->id));
+			return (phi_log_dead((t_philo *)(p->phi), p->id), NULL);
 		}
 	}
 	return (NULL);

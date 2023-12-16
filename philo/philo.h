@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:05:21 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/16 14:43:51 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/16 15:04:06 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -45,28 +45,28 @@
 
 typedef struct s_name
 {
-	pthread_t			thread;
-	pthread_t			supervisor;
-	pthread_mutex_t		*lock;
-	void				*phi;
-	long long			id;
-	int					active;
-	pthread_mutex_t		fork;
-	unsigned long long	i;
-	int					iseating;
-	int					issleeping;
-	int					isthinking;
-	int					haspfork;
-	int					hasnfork;
-	long long			nop;
-	useconds_t			ttd;
-	useconds_t			tte;
-	useconds_t			tts;
-	long long			notepme;
-	struct timeval		tv;
-	struct s_name		*prev;
-	struct s_name		*next;
-}						t_name;
+	pthread_t		thread;
+	pthread_t		supervisor;
+	pthread_mutex_t	*lock;
+	void			*phi;
+	long long		id;
+	int				active;
+	pthread_mutex_t	fork;
+	long long		i;
+	int				iseating;
+	int				issleeping;
+	int				isthinking;
+	int				haspfork;
+	int				hasnfork;
+	long long		nop;
+	useconds_t		ttd;
+	useconds_t		tte;
+	useconds_t		tts;
+	long long		notepme;
+	struct timeval	tv;
+	struct s_name	*prev;
+	struct s_name	*next;
+}					t_name;
 
 typedef struct s_philo
 {

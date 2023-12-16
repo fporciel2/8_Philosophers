@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 11:13:06 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/15 10:03:02 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/16 15:12:31 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -40,7 +40,7 @@ static int	phi_start_dinner(t_philo *phi)
 	return (phi_clean_table(phi));
 }
 
-static int	phi_check_input_correctness(t_philo *phi, int argc)
+static int	phi_check_input_correctness(t_philo *phi)
 {
 	if (phi->nop == 0)
 		return (0);
@@ -56,7 +56,7 @@ int	main(int argc, char **argv)
 	argc--;
 	argv++;
 	phi.result = phi_init(&phi, argc, argv);
-	if ((phi.result < 0) || (!phi_check_input_correctness(&phi, argc)))
+	if ((phi.result < 0) || (!phi_check_input_correctness(&phi)))
 		return (phi.result);
 	if (argc == 4)
 		phi.notepme = -1;
