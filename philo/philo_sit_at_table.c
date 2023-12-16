@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 11:38:03 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/16 12:49:48 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/16 15:23:37 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -46,6 +46,7 @@ static int	phi_init_internal_checkers(t_name *head)
 		tmp->issleeping = 0;
 		tmp->isthinking = 0;
 		tmp = tmp->next;
+		i++;
 	}
 	return (1);
 }
