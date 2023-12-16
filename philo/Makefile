@@ -6,7 +6,7 @@
 #    By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/06 13:45:55 by fporciel          #+#    #+#              #
-#    Updated: 2023/12/16 14:58:39 by fporciel         ###   ########.fr        #
+#    Updated: 2023/12/16 15:00:35 by fporciel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 # 'Philosophers' is a simulation program that explores concurrent programming
@@ -63,7 +63,6 @@ fclean: clean
 re: clean fclean all
 
 autogit: fclean
-	cd ..
 	git status
 	git add *
 	git status
@@ -71,7 +70,6 @@ autogit: fclean
 	read commit_message; git commit -m "$$commit_message"
 	git status
 	git push
-	cd philo
 
 memcheck:
 	@echo "\nPlease, enter your input to test:"
