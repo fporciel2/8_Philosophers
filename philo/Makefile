@@ -6,7 +6,7 @@
 #    By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/06 13:45:55 by fporciel          #+#    #+#              #
-#    Updated: 2023/12/13 16:27:47 by fporciel         ###   ########.fr        #
+#    Updated: 2023/12/16 14:58:39 by fporciel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 # 'Philosophers' is a simulation program that explores concurrent programming
@@ -32,7 +32,7 @@
 #- fporciel@student.42roma.it
 #
 
-.PHONY: all autogit memcheck helgrind drd
+.PHONY: all clean fclean re autogit memcheck helgrind drd
 .DEFAULT_GOAL: all
 NAME := philo
 DIR := $(shell pwd)
@@ -52,10 +52,26 @@ $(NAME): $(OBJS)
 
 $(OBJS): $(SRCS) $(HDR)
 	$(CC) $(CFLAGS) -c $(SRCS) $(HDR)
-	rm -f philo.h.gch
 
-autogit:
-	cd .. && make autogit && cd philo
+clean:
+	rm -f $(OBJS)
+	rm -f $(HDR).gch
+
+fclean: clean
+	rm -f $(NAME)
+
+re: clean fclean all
+
+autogit: fclean
+	cd ..
+	git status
+	git add *
+	git status
+	echo "\nPlease, enter your commit message:"
+	read commit_message; git commit -m "$$commit_message"
+	git status
+	git push
+	cd philo
 
 memcheck:
 	@echo "\nPlease, enter your input to test:"
@@ -74,3 +90,4 @@ drd:
 	@read input; \
 		valgrind --tool=drd --check-stack-var=yes --show-stack-usage=yes \
 		./philo $$input
+
