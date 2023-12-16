@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 11:38:03 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/14 10:52:47 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/16 09:41:19 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -49,6 +49,7 @@ static int	phi_assign_values(t_name *head, t_philo *phi)
 		tmp->tts = phi->tts;
 		tmp->notepme = phi->notepme;
 		tmp->lock = &(phi->lock);
+		tmp->phi = (void *)phi;
 		i++;
 		tmp = tmp->next;
 	}

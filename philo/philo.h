@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:05:21 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/15 15:30:03 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/16 11:24:40 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -45,24 +45,29 @@
 
 typedef struct s_name
 {
-	pthread_t		thread;
-	pthread_t		supervisor;
-	pthread_t		monitor;
-	pthread_mutex_t	*lock;
-	long long		id;
-	int				active;
-	pthread_mutex_t	fork;
-	int				fork_value;
-	int				isalive;
-	long long		nop;
-	useconds_t		ttd;
-	useconds_t		tte;
-	useconds_t		tts;
-	long long		notepme;
-	struct timeval	tv;
-	struct s_name	*prev;
-	struct s_name	*next;
-}					t_name;
+	pthread_t			thread;
+	pthread_t			supervisor;
+	pthread_t			monitor;
+	pthread_mutex_t		*lock;
+	void				*phi;
+	long long			id;
+	int					active;
+	pthread_mutex_t		fork;
+	unsigned long long	i;
+	int					iseating;
+	int					issleeping;
+	int					isthinking;
+	int					haspfork;
+	int					hasnfork;
+	long long			nop;
+	useconds_t			ttd;
+	useconds_t			tte;
+	useconds_t			tts;
+	long long			notepme;
+	struct timeval		tv;
+	struct s_name		*prev;
+	struct s_name		*next;
+}						t_name;
 
 typedef struct s_philo
 {
@@ -93,9 +98,29 @@ void		*phi_routine(void *philo);
 int			phi_init_threads(t_philo *phi);
 int			phi_pthread_create_failure(t_philo *phi);
 void		*phi_supervisor(void *philo);
+void		*phi_notepme_supervisor(void *philo);
 void		*phi_monitor(void *philo);
-int			phi_supervisor_start_failure(t_name *philo);
-int			phi_monitor_start_failure(t_name *philo);
-void		*phi_gettime_routine_failure(t_name *philo);
+void		*phi_supervisor_start_failure(t_name *philo);
+void		*phi_mutex_lock_failure(t_name *philo);
+void		*phi_mutex_unlock_failure(t_name *philo);
+void		*phi_mutex_pfork_failure(t_name *philo);
+void		*phi_log_tfork1_failure(t_name *philo);
+void		*phi_mutex_nfork_failure(t_name *philo);
+void		*phi_mutex_lock1_failure(t_name *philo);
+void		*phi_mutex_tfork2_failure(t_name *philo);
+void		*phi_mutex_unlock1_failure(t_name *philo);
+int			phi_mutex_lock2_failure(t_name *philo);
+int			phi_log_eating_failure(t_name *philo);
+int			phi_mutex_unlock2_failure(t_name *philo);
+int			phi_tte_failure(t_name *philo);
+int			phi_mutex_dpfork_failure(t_name *philo);
+int			phi_mutex_dnfork_failure(t_name *philo);
+int			phi_mutex_lock3_failure(t_name *philo);
+int			phi_log_sleeping_failure(t_name *philo);
+int			phi_mutex_unlock3_failure(t_name *philo);
+int			phi_tts_failure(t_name *philo);
+int			phi_mutex_lock4_failure(t_name *philo);
+int			phi_log_thinking_failure(t_name *philo);
+int			phi_mutex_unlock4_failure(t_name *philo);
 
 #endif

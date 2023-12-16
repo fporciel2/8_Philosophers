@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 11:04:10 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/15 15:29:22 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/16 11:26:48 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -32,31 +32,107 @@
 
 #include "philo.h"
 
+static int	phi_end_routine(t_name *philo)
+{
+	if (pthread_mutex_lock(philo->lock) != 0)
+		return (phi_mutex_lock4_failure(philo));
+	if (phi_log_thinking((t_philo *)(philo->phi), philo->id) < 0)
+		return (phi_log_thinking_failure(philo));
+	if (pthread_mutex_unlock(philo->lock) != 0)
+		return (phi_mutex_unlock4_failure(philo));
+	return (1);
+}
+
+static int	phi_continue_routine(t_name *philo)
+{
+	if (pthread_mutex_lock(philo->lock) != 0)
+		return (phi_mutex_lock2_failure(philo));
+	if (phi_log_eating((t_philo *)(philo->phi), philo->id) < 0)
+		return (phi_log_eating_failure(philo));
+	if (pthread_mutex_unlock(philo->lock) != 0)
+		return (phi_mutex_unlock2_failure(philo));
+	if (usleep(philo->tte) < 0)
+		return (phi_tte_failure(philo));
+	if (pthread_mutex_unlock(&(philo->next->fork)) != 0)
+		return (phi_mutex_dpfork_failure(philo));
+	if (pthread_mutex_unlock(&(philo->prev->fork)) != 0)
+		return (phi_mutex_dnfork_failure(philo));
+	if (pthread_mutex_lock(philo->lock) != 0)
+		return (phi_mutex_lock3_failure(philo));
+	if (phi_log_sleeping((t_philo *)(philo->phi), philo->id) < 0)
+		return (phi_log_sleeping_failure(philo));
+	if (pthread_mutex_unlock(philo->lock) != 0)
+		return (phi_mutex_unlock3_failure(philo));
+	if (usleep(philo->tts) < 0)
+		return (phi_tts_failure(philo));
+	return (phi_end_routine(philo));
+}
+
 static void	*phi_notepme_routine(t_name *philo)
 {
+	while ((philo->i)++ < philo->notepme)
+	{
+		if (pthread_mutex_lock(&(philo->prev->fork)) != 0)
+			return (phi_mutex_pfork1_failure(philo));
+		if (pthread_mutex_lock(philo->lock) != 0)
+			return (phi_mutex_lock_failure(philo));
+		if (phi_log_taken_fork((t_philo *)(philo->phi), philo->id) < 0)
+			return (phi_log_tfork1_failure(philo));
+		if (pthread_mutex_unlock(philo->lock) != 0)
+			return (phi_mutex_unlock_failure(philo));
+		if (pthread_mutex_lock(&(philo->next->fork)) != 0)
+			return (phi_mutex_pfork2_failure(philo));
+		if (pthread_mutex_lock(philo->lock) != 0)
+			return (phi_mutex_lock1_failure(philo));
+		if (phi_log_taken_fork((t_philo *)(philo->phi), philo->id) < 0)
+			return (phi_mutex_tfork2_failure(philo));
+		if (pthread_mutex_unlock(philo->lock) != 0)
+			return (phi_mutex_unlock1_failure(philo));
+		if (phi_continue_routine(philo) < 0)
+			return (NULL);
+	}
+	return (NULL);
 }
 
 static void	*phi_normal_routine(t_name *philo)
-{
-	unsigned long long	time;
-	
+{	
 	while (1)
 	{
-		if (gettimeofday(&(philo->tv), NULL) < 0)
-			return (phi_gettime_routine_failure(philo));
+		if (pthread_mutex_lock(&(philo->prev->fork)) != 0)
+			return (phi_mutex_pfork1_failure(philo));
+		if (pthread_mutex_lock(philo->lock) != 0)
+			return (phi_mutex_lock_failure(philo));
+		if (phi_log_taken_fork((t_philo *)(philo->phi), philo->id) < 0)
+			return (phi_log_tfork1_failure(philo));
+		if (pthread_mutex_unlock(philo->lock) != 0)
+			return (phi_mutex_unlock_failure(philo));
+		if (pthread_mutex_lock(&(philo->next->fork)) != 0)
+			return (phi_mutex_pfork2_failure(philo));
+		if (pthread_mutex_lock(philo->lock) != 0)
+			return (phi_mutex_lock1_failure(philo));
+		if (phi_log_taken_fork((t_philo *)(philo->phi), philo->id) < 0)
+			return (phi_mutex_tfork2_failure(philo));
+		if (pthread_mutex_unlock(philo->lock) != 0)
+			return (phi_mutex_unlock1_failure(philo));
+		if (phi_continue_routine(philo) < 0)
+			return (NULL);
 	}
+	return (NULL);
 }
 
 void	*phi_routine(void *philo)
 {
-	if (pthread_create(&(((t_name *)philo)->supervisor), NULL,
-				phi_supervisor, philo) != 0)
-		return ((void *)phi_suprevisor_start_failure((t_name *)philo));
-	if (pthread_create(&(((t_name *)philo)->monitor), NULL,
-				phi_monitor, philo) != 0)
-		return ((void *)phi_monitor_start_failure((t_name *)philo));
 	if ((((t_name *)philo)->notepme) < 0)
+	{
+		if (pthread_create(&(((t_name *)philo)->supervisor), NULL,
+					phi_supervisor, (void *)philo) != 0)
+			return (phi_suprevisor_start_failure((t_name *)philo));
 		return (phi_normal_routine((t_name *)philo));
+	}
 	else
+	{
+		if (pthread_create(&(((t_name *)philo)->supervisor), NULL,
+					phi_notepme_supervisor, (void *)philo) != 0)
 		return (phi_notepme_routine((t_name *)philo));
+	}
 }
