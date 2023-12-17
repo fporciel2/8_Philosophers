@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/17 16:04:26 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/17 16:21:19 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/17 16:30:18 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -34,7 +34,7 @@
 
 int	phi_check_unlock(t_name *p, pthread_mutex_t *m)
 {
-	if (pthread_mutex_lock(&(p->over)) || (p->over == 1)
+	if (pthread_mutex_lock(&(p->over)) || (p->isover == 1)
 		|| pthread_mutex_unlock(&(p->over))
 		|| pthread_mutex_unlock(m))
 		return (1);
@@ -43,7 +43,7 @@ int	phi_check_unlock(t_name *p, pthread_mutex_t *m)
 
 int	phi_check_lock(t_name *p, pthread_mutex_t *m)
 {
-	if (pthread_mutex_lock(&(p->over)) || (p->over == 1)
+	if (pthread_mutex_lock(&(p->over)) || (p->isover == 1)
 		|| pthread_mutex_unlock(&(p->over))
 		|| pthread_mutex_lock(m))
 		return (1);
@@ -52,7 +52,7 @@ int	phi_check_lock(t_name *p, pthread_mutex_t *m)
 
 int	phi_check_gettime(t_name *p)
 {
-	if (pthread_mutex_lock(&(p->over)) || (p->over == 1)
+	if (pthread_mutex_lock(&(p->over)) || (p->isover == 1)
 		|| pthread_mutex_unlock(&(p->over))
 		|| (gettimeofday(&(p->tv), NULL) < 0))
 		return (1);

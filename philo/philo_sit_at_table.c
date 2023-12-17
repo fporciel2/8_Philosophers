@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 11:38:03 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/17 14:38:51 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/17 16:29:33 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -45,7 +45,7 @@ static int	phi_init_internal_checkers(t_name *head, t_philo *phi)
 			return (phi_bad_checking(phi, tmp, 0));
 		if (pthread_mutex_init(&(tmp->killer), NULL) != 0)
 			return (phi_bad_checking(phi, tmp, 1));
-		if (pthread_mutex_int(&(tmp->over), NULL) != 0)
+		if (pthread_mutex_init(&(tmp->over), NULL) != 0)
 			return (phi_bad_checking(phi, tmp, 2));
 		tmp->i = 0;
 		tmp->iseating = 0;
