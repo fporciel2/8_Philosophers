@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/16 14:02:02 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/17 09:14:25 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/17 09:31:04 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -68,8 +68,8 @@ void	*phi_supervisor(void *philo)
 			return (NULL);
 		if (p->iseating == 0)
 		{
-			pthread_detach(p->thread);
-			return (phi_log_dead((t_philo *)(p->phi), p->id), NULL);
+			phi_log_dead((t_philo *)(p->phi), p->id);
+			return (pthread_detach(p->thread), NULL);
 		}
 		if (pthread_mutex_unlock(&(p->eat_calm)) != 0)
 			return (pthread_detach(p->thread), NULL);

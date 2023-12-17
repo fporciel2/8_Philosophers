@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:05:21 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/17 08:58:12 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/17 10:26:24 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -88,6 +88,8 @@ long long	ft_atol(char *nptr);
 useconds_t	phi_atoitou(char *nptr);
 int			phi_sit_at_table(t_philo *phi);
 int			phi_error_sit_at_table(t_philo *phi);
+int			phi_bad_sitting(t_philo *phi, t_name *tmp);
+int			phi_bad_checking(t_philo *phi, t_name *tmp);
 int			phi_clean_table(t_philo *phi);
 int			phi_log_taken_fork(t_philo *phi, long long nop);
 int			phi_log_eating(t_philo *phi, long long nop);

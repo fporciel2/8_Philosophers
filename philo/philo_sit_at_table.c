@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 11:38:03 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/16 15:23:37 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/17 10:33:06 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -32,7 +32,7 @@
 
 #include "philo.h"
 
-static int	phi_init_internal_checkers(t_name *head)
+static int	phi_init_internal_checkers(t_name *head, t_philo *phi)
 {
 	unsigned long long	i;
 	t_name				*tmp;
@@ -41,6 +41,8 @@ static int	phi_init_internal_checkers(t_name *head)
 	tmp = head;
 	while ((tmp && (tmp != head)) || (i == 0))
 	{
+		if (pthread_mutex_init(&(tmp->eat_calm), NULL) != 0)
+			return (phi_bad_checking(phi, tmp));
 		tmp->i = 0;
 		tmp->iseating = 0;
 		tmp->issleeping = 0;
@@ -61,7 +63,7 @@ static int	phi_assign_values(t_name *head, t_philo *phi)
 	while ((tmp && (tmp != head)) || (i == 0))
 	{
 		if (pthread_mutex_init(&(tmp->fork), NULL) != 0)
-			return (phi_error_sit_at_table(phi));
+			return (phi_bad_sitting(phi, tmp));
 		tmp->nop = phi->nop;
 		tmp->ttd = phi->ttd;
 		tmp->tte = phi->tte;
@@ -72,7 +74,7 @@ static int	phi_assign_values(t_name *head, t_philo *phi)
 		i++;
 		tmp = tmp->next;
 	}
-	return (phi_init_internal_checkers(head));
+	return (phi_init_internal_checkers(head, phi));
 }
 
 static int	phi_be_comforted(t_philo *phi, t_name *iter)

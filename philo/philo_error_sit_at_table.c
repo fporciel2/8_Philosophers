@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 13:42:57 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/14 10:54:30 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/17 10:21:45 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -38,12 +38,43 @@ int	phi_error_sit_at_table(t_philo *phi)
 	t_name	*j;
 
 	i = phi->philosophers;
-	while (i != NULL)
+	while (i)
 	{
-		pthread_mutex_destroy(&(i->fork));
 		j = i->next;
 		free(i);
 		i = j;
 	}
 	return (-1);
+}
+
+int	phi_bad_sitting(t_philo *phi, t_name *tmp)
+{
+	t_name	*i;
+	t_name	*j;
+
+	i = phi->philosophers;
+	j = NULL;
+	while (i && ((i != tmp) || ((j == NULL) && (i != j))))
+	{
+		j = i->next;
+		pthread_mutex_destroy(&(i->fork));
+		i = j;
+	}
+	return (phi_error_sit_at_table(phi));
+}
+
+int	phi_bad_checking(t_philo *phi, t_name *tmp)
+{
+	t_name	*i;
+	t_name	*j;
+
+	i = phi->philosophers;
+	j = NULL;
+	while (i && ((i != tmp) || ((j == NULL) && (i != j))))
+	{
+		j = i->next;
+		pthread_mutex_destroy(&(i->eat_calm));
+		i = j;
+	}
+	return (phi_bad_sitting(phi, phi->philosophers));
 }
