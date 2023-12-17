@@ -6,7 +6,7 @@
 #    By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/06 13:45:55 by fporciel          #+#    #+#              #
-#    Updated: 2023/12/16 15:00:35 by fporciel         ###   ########.fr        #
+#    Updated: 2023/12/17 11:22:03 by fporciel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 # 'Philosophers' is a simulation program that explores concurrent programming
@@ -32,7 +32,7 @@
 #- fporciel@student.42roma.it
 #
 
-.PHONY: all clean fclean re autogit memcheck helgrind drd
+.PHONY: all clean fclean re autogit asan tsan
 .DEFAULT_GOAL: all
 NAME := philo
 DIR := $(shell pwd)
@@ -40,12 +40,25 @@ SRCS := $(wildcard philo*.c)
 OBJS := $(patsubst %.c, %.o, $(SRCS))
 HDR := philo.h
 CC := gcc
-CFLAGS := -std=c17 -pedantic-errors -Wall -Wextra -Werror -O3 -march=native -g \
+CFLAGS := -std=c17 -pedantic-errors -Wall -Wextra -Werror -pthread \
+		  -O3 -march=native -g \
 		  $(addprefix -I, $(DIR))
 LDLIBS := $(addprefix -L, $(DIR))
 LDFLAGS := -lc -lpthread
 
 all: $(NAME)
+
+asan: CFLAGS := -std=c17 -pedantic-errors -Wall -Wextra -Werror \
+	-fsanitize=address -pthread -O3 -march=native -g \
+	$(addprefix -I, $(DIR))
+
+asan: all
+
+tsan: CFLAGS := -std=c17 -pedantic-errors -Wall -Wextra -Werror \
+	-fsanitize=thread -pthread -O3 -march=native -g \
+	$(addprefix -I, $(DIR))
+
+tsan: all
 
 $(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LDLIBS) $(LDFLAGS) -o $(NAME)
@@ -70,22 +83,4 @@ autogit: fclean
 	read commit_message; git commit -m "$$commit_message"
 	git status
 	git push
-
-memcheck:
-	@echo "\nPlease, enter your input to test:"
-	@read input; \
-		valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
-		--show-error-list=yes -s -v ./philo $$input
-
-helgrind:
-	@echo "\nPlease, enter your input to test:"
-	@read input; \
-		valgrind --tool=helgrind --history-level=full --read-var-info=yes \
-		-s ./philo $$input
-
-drd:
-	@echo "\nPlease, enter your input to test:"
-	@read input; \
-		valgrind --tool=drd --check-stack-var=yes --show-stack-usage=yes \
-		./philo $$input
 
