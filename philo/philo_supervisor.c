@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/16 14:02:02 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/16 15:13:12 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/17 09:14:25 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -47,6 +47,8 @@ static int	phi_supervisor_loop(t_name *p, unsigned long long start)
 			+ (unsigned long long)(p->tv.tv_usec) / 1000;
 		delta = time - start;
 	}
+	if (pthread_mutex_lock(&(p->eat_calm)) != 0)
+		return (pthread_detach(p->thread), -1);
 	return (1);
 }
 
@@ -64,11 +66,13 @@ void	*phi_supervisor(void *philo)
 			+ (unsigned long long)(p->tv.tv_usec) / 1000;
 		if (phi_supervisor_loop(p, start) < 0)
 			return (NULL);
-		if ((p->issleeping == 1) || (p->isthinking == 1) || (p->iseating == 0))
+		if (p->iseating == 0)
 		{
 			pthread_detach(p->thread);
 			return (phi_log_dead((t_philo *)(p->phi), p->id), NULL);
 		}
+		if (pthread_mutex_unlock(&(p->eat_calm)) != 0)
+			return (pthread_detach(p->thread), NULL);
 	}
 	return (NULL);
 }
