@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/16 14:02:02 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/17 09:31:04 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/17 16:25:29 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -32,6 +32,22 @@
 
 #include "philo.h"
 
+static int	phi_supervisor_check(t_name *p)
+{
+	if (p->iseating == 0)
+	{
+		pthread_mutex_lock(p->lock);
+		phi_log_dead((t_philo *)(p->phi), p->id);
+		pthread_mutex_unlock(p->lock);
+		return (-1);
+	}
+	pthread_mutex_lock(&(p->over));
+	if (p->isover == 1)
+		return (-1);
+	pthread_mutex_unlock(&(p->over));
+	return (1);
+}
+
 static int	phi_supervisor_loop(t_name *p, unsigned long long start)
 {
 	unsigned long long	delta;
@@ -41,14 +57,14 @@ static int	phi_supervisor_loop(t_name *p, unsigned long long start)
 	time = 0;
 	while (delta < p->ttd)
 	{
-		if (gettimeofday(&(p->tv), NULL) < 0)
-			return (pthread_detach(p->thread), -1);
+		if (phi_check_gettime(p))
+			return (-1);
 		time = (unsigned long long)(p->tv.tv_sec) * 1000
 			+ (unsigned long long)(p->tv.tv_usec) / 1000;
 		delta = time - start;
 	}
-	if (pthread_mutex_lock(&(p->eat_calm)) != 0)
-		return (pthread_detach(p->thread), -1);
+	if (phi_check_lock(p, &(p->eat_calm)))
+		return (-1);
 	return (1);
 }
 
@@ -60,19 +76,16 @@ void	*phi_supervisor(void *philo)
 	p = (t_name *)philo;
 	while (1)
 	{
-		if (gettimeofday(&(p->tv), NULL) < 0)
-			return (pthread_detach(p->thread), NULL);
+		if (phi_check_gettime(p))
+			return (phi_exit_sup(p));
 		start = (unsigned long long)(p->tv.tv_sec) * 1000
 			+ (unsigned long long)(p->tv.tv_usec) / 1000;
 		if (phi_supervisor_loop(p, start) < 0)
-			return (NULL);
-		if (p->iseating == 0)
-		{
-			phi_log_dead((t_philo *)(p->phi), p->id);
-			return (pthread_detach(p->thread), NULL);
-		}
-		if (pthread_mutex_unlock(&(p->eat_calm)) != 0)
-			return (pthread_detach(p->thread), NULL);
+			return (phi_exit_sup(p));
+		if (phi_supervisor_check(p) < 0)
+			return (phi_exit_sup(p));
+		if (phi_check_unlock(p, &(p->eat_calm)))
+			return (phi_exit_sup(p));
 	}
 	return (NULL);
 }

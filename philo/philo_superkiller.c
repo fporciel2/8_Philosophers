@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_utils.c                                      :+:      :+:    :+:   */
+/*   philo_superkiller.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/08 13:45:10 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/17 14:48:45 by fporciel         ###   ########.fr       */
+/*   Created: 2023/12/17 16:04:26 by fporciel          #+#    #+#             */
+/*   Updated: 2023/12/17 16:21:19 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -32,76 +32,37 @@
 
 #include "philo.h"
 
-int	ft_isdigit(char c)
+int	phi_check_unlock(t_name *p, pthread_mutex_t *m)
 {
-	return ((c >= 48) && (c <= 57));
-}
-
-static long long	ft_power(long long base, long long exp)
-{
-	long long	power;
-	long long	cpower;
-
-	if ((base == 0) && (exp != 0))
-		return (0);
-	else if (exp == 0)
+	if (pthread_mutex_lock(&(p->over)) || (p->over == 1)
+		|| pthread_mutex_unlock(&(p->over))
+		|| pthread_mutex_unlock(m))
 		return (1);
-	else
-	{
-		power = 1;
-		cpower = base;
-		while (exp)
-		{
-			if (exp & 1)
-				power *= cpower;
-			cpower *= cpower;
-			exp >>= 1;
-		}
-	}
-	return (power);
+	return (0);
 }
 
-static long long	ft_chkatol(char *nptr)
+int	phi_check_lock(t_name *p, pthread_mutex_t *m)
 {
-	long long	i;
-
-	i = 0;
-	while (!ft_isdigit(nptr[i]) && (nptr[i] != 0))
-	{
-		if (!((nptr[i] == 43) || (nptr[i] == 45))
-			&& !((nptr[i] == 32)
-				|| ((nptr[i] >= 9) && (nptr[i] <= 13))))
-			return (0);
-		if ((nptr[i] == 45) && (ft_isdigit(nptr[i + 1])))
-			return (-1);
-		if (((nptr[i] == 43) || (nptr[i] == 45)) && (!ft_isdigit(nptr[i + 1])))
-			return (0);
-		i++;
-	}
-	return (1);
+	if (pthread_mutex_lock(&(p->over)) || (p->over == 1)
+		|| pthread_mutex_unlock(&(p->over))
+		|| pthread_mutex_lock(m))
+		return (1);
+	return (0);
 }
 
-long long	ft_atol(char *nptr)
+int	phi_check_gettime(t_name *p)
 {
-	long long	i;
-	long long	j;
-	long long	num;
-	long long	exp;
+	if (pthread_mutex_lock(&(p->over)) || (p->over == 1)
+		|| pthread_mutex_unlock(&(p->over))
+		|| (gettimeofday(&(p->tv), NULL) < 0))
+		return (1);
+	return (0);
+}
 
-	i = 0;
-	num = 0;
-	j = 0;
-	while (!ft_isdigit(nptr[i]) && (nptr[i] != 0))
-		i++;
-	j = i;
-	while (ft_isdigit(nptr[i]))
-		i++;
-	exp = ((i - j) - 1);
-	while (j < i)
-	{
-		num = num + ((nptr[j] - 48) * ft_power(10, exp));
-		exp--;
-		j++;
-	}
-	return (num * ft_chkatol(nptr));
+void	*phi_exit_sup(t_name *p)
+{
+	pthread_mutex_lock(&(p->killer));
+	p->kill = 1;
+	pthread_mutex_unlock(&(p->killer));
+	return (NULL);
 }

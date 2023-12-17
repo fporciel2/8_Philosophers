@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:05:21 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/17 10:26:24 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/17 16:28:02 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -59,6 +59,10 @@ typedef struct s_name
 	int				isthinking;
 	int				haspfork;
 	int				hasnfork;
+	int				kill;
+	int				isover;
+	pthread_mutex_t	killer;
+	pthread_mutex_t	over;
 	long long		nop;
 	useconds_t		ttd;
 	useconds_t		tte;
@@ -89,7 +93,7 @@ useconds_t	phi_atoitou(char *nptr);
 int			phi_sit_at_table(t_philo *phi);
 int			phi_error_sit_at_table(t_philo *phi);
 int			phi_bad_sitting(t_philo *phi, t_name *tmp);
-int			phi_bad_checking(t_philo *phi, t_name *tmp);
+int			phi_bad_checking(t_philo *phi, t_name *tmp, int param);
 int			phi_clean_table(t_philo *phi);
 int			phi_log_taken_fork(t_philo *phi, long long nop);
 int			phi_log_eating(t_philo *phi, long long nop);
@@ -100,5 +104,12 @@ void		*phi_routine(void *philo);
 int			phi_init_threads(t_philo *phi);
 int			phi_pthread_create_failure(t_philo *phi);
 void		*phi_supervisor(void *philo);
+int			phi_check_lock_routine(t_name *p, pthread_mutex_t *mutex);
+int			phi_check_unlock_routine(t_name *p, pthread_mutex_t *mutex);
+void		*phi_exit_routine(t_name *p);
+int			phi_check_unlock(t_name *p, pthread_mutex_t *m);
+int			phi_check_lock(t_name *p, pthread_mutex_t *m);
+int			phi_check_gettime(t_name *p);
+void		*phi_exit_sup(t_name *p);
 
 #endif
