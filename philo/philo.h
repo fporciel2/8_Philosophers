@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:05:21 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/16 15:04:06 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/17 08:58:12 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -48,6 +48,7 @@ typedef struct s_name
 	pthread_t		thread;
 	pthread_t		supervisor;
 	pthread_mutex_t	*lock;
+	pthread_mutex_t	eat_calm;
 	void			*phi;
 	long long		id;
 	int				active;

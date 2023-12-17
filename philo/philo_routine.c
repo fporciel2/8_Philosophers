@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 11:04:10 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/16 15:09:37 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/17 09:05:47 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -34,6 +34,12 @@
 
 static int	phi_end_routine(t_name *philo)
 {
+	philo->haspfork = 0;
+	if (pthread_mutex_lock(philo->lock) != 0)
+		return (pthread_detach(philo->supervisor), -1);
+	if (phi_log_sleeping((t_philo *)(philo->phi), philo->id) < 0)
+		return (pthread_detach(philo->supervisor), -1);
+	philo->issleeping = 1;
 	if (pthread_mutex_unlock(philo->lock) != 0)
 		return (pthread_detach(philo->supervisor), -1);
 	if (usleep(philo->tts) < 0)
@@ -55,23 +61,21 @@ static int	phi_continue_routine(t_name *philo)
 		return (pthread_detach(philo->supervisor), -1);
 	if (phi_log_eating((t_philo *)(philo->phi), philo->id) < 0)
 		return (pthread_detach(philo->supervisor), -1);
-	philo->iseating = 1;
 	if (pthread_mutex_unlock(philo->lock) != 0)
 		return (pthread_detach(philo->supervisor), -1);
+	if (pthread_mutex_lock(&(philo->eat_calm)) != 0)
+		return (pthread_detach(philo->supervisor), -1);
+	philo->iseating = 1;
 	if (usleep(philo->tte) < 0)
 		return (pthread_detach(philo->supervisor), -1);
+	if (pthread_mutex_unlock(&(philo->eat_calm)) != 0)
+		return (pthread_detach(philo->supervisor), -1);
+	philo->iseating = 0;
 	if (pthread_mutex_unlock(&(philo->next->fork)) != 0)
 		return (pthread_detach(philo->supervisor), -1);
 	philo->hasnfork = 0;
 	if (pthread_mutex_unlock(&(philo->prev->fork)) != 0)
 		return (pthread_detach(philo->supervisor), -1);
-	philo->haspfork = 0;
-	if (pthread_mutex_lock(philo->lock) != 0)
-		return (pthread_detach(philo->supervisor), -1);
-	philo->iseating = 0;
-	if (phi_log_sleeping((t_philo *)(philo->phi), philo->id) < 0)
-		return (pthread_detach(philo->supervisor), -1);
-	philo->issleeping = 1;
 	return (phi_end_routine(philo));
 }
 
@@ -135,7 +139,16 @@ static void	*phi_normal_routine(t_name *philo)
 
 void	*phi_routine(void *philo)
 {
-	if ((((t_name *)philo)->notepme) < 0)
+	if (((((t_name *)philo)->prev) == NULL)
+		|| ((((t_name *)philo)->next) == NULL))
+	{
+		if (pthread_create(&(((t_name *)philo)->supervisor), NULL,
+				phi_supervisor, (void *)philo) != 0)
+			return (NULL);
+		if (usleep(((t_name *)philo)->ttd) < 0)
+			return (pthread_detach(((t_name *)philo)->supervisor), NULL);
+	}
+	else if ((((t_name *)philo)->notepme) < 0)
 	{
 		if (pthread_create(&(((t_name *)philo)->supervisor), NULL,
 				phi_supervisor, (void *)philo) != 0)
@@ -149,4 +162,5 @@ void	*phi_routine(void *philo)
 			return (NULL);
 		return (phi_notepme_routine((t_name *)philo));
 	}
+	return (NULL);
 }
