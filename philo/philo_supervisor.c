@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 09:18:14 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/18 12:01:43 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/18 12:18:40 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -48,7 +48,7 @@ static int	phi_check_iseating(t_name *p)
 static int	phi_check_isdead(t_name *p)
 {
 	pthread_mutex_lock(&(p->dead));
-	if (p->dead == 1)
+	if (p->isdead == 1)
 	{
 		pthread_mutex_unlock(&(p->dead));
 		return (1);
@@ -91,7 +91,7 @@ static void	*phi_start_supervision(t_name *p)
 		return (NULL);
 	start = (unsigned long long)(p->tv.tv_sec) * 1000
 		+ (unsigned long long)(p->tv.tv_usec) / 1000;
-	if (pthread_create(p->thread, NULL, phi_routine, (void *)p) != 0)
+	if (pthread_create(&(p->thread), NULL, phi_routine, (void *)p) != 0)
 		return (NULL);
 	return (phi_supervision(p, start));
 }
@@ -99,13 +99,15 @@ static void	*phi_start_supervision(t_name *p)
 void	*phi_superv(void *ph)
 {
 	t_name	*p;
+	t_philo	*phi;
 
 	p = (t_name *)ph;
-	if (p->(t_philo *)phi->nop == 1)
+	phi = (t_philo *)(p->phi);
+	if (phi->nop == 1)
 	{
 		if (usleep(p->ttd) < 0)
 			return (NULL);
-		p->r = phi_log_dead(p->(t_philo *)phi, 1);
+		p->r = phi_log_dead((t_philo *)(p->phi), 1);
 		return (NULL);
 	}
 	return (phi_start_supervision(p));

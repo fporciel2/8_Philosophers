@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:05:21 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/18 11:57:39 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/18 12:12:16 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -86,6 +86,8 @@ int			ft_isdigit(char c);
 long long	ft_atol(char *nptr);
 useconds_t	phi_atoitou(char *nptr);
 int			phi_sit_at_table(t_philo *phi);
+int			phi_init_threads(t_philo *phi);
+int			phi_pthread_create_failure(t_philo *phi);
 int			phi_error_sit_at_table(t_philo *phi);
 int			phi_bad_sitting(t_philo *phi, t_name *tmp);
 int			phi_bad_checking(t_philo *phi, t_name *tmp, int param);

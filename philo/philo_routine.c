@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 11:03:04 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/18 11:54:40 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/18 12:06:56 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -35,11 +35,11 @@
 static void	*phi_end_routine(t_name *p)
 {
 	if ((pthread_mutex_lock(p->lock) != 0)
-		|| (phi_log_sleeping(p->(t_philo *)phi, p->id) < 0)
+		|| (phi_log_sleeping(p->phi, p->id) < 0)
 		|| (pthread_mutex_unlock(p->lock) != 0)
 		|| (usleep(p->tts) < 0)
 		|| (pthread_mutex_lock(p->lock) != 0)
-		|| (phi_log_thinking(p->(t_philo *)phi, p->id) < 0)
+		|| (phi_log_thinking(p->phi, p->id) < 0)
 		|| (pthread_mutex_unlock(p->lock) != 0))
 		return (phi_death(p));
 	return (p->phi);
@@ -48,7 +48,7 @@ static void	*phi_end_routine(t_name *p)
 static void	*phi_continue_routine(t_name *p)
 {
 	if ((pthread_mutex_lock(p->lock) != 0)
-		|| (phi_log_eating(p->(t_philo *)phi, p->id) < 0)
+		|| (phi_log_eating(p->phi, p->id) < 0)
 		|| (pthread_mutex_unlock(p->lock) != 0)
 		|| (usleep(p->tte) < 0)
 		|| (pthread_mutex_lock(&(p->eat)) != 0))
@@ -68,11 +68,11 @@ static void	*phi_abnormal_routine(t_name *p, long long val)
 	{
 		if ((pthread_mutex_lock(&(p->prev->fork)) != 0)
 			|| (pthread_mutex_lock(p->lock) != 0)
-			|| (phi_log_taken_fork(p->(t_philo *)phi, p->id) < 0)
+			|| (phi_log_taken_fork(p->phi, p->id) < 0)
 			|| (pthread_mutex_unlock(p->lock) != 0)
 			|| (pthread_mutex_lock(&(p->next->fork)) != 0)
 			|| (pthread_mutex_lock(p->lock) != 0)
-			|| (phi_log_taken_fork(p->(t_philo *)phi, p->id) < 0)
+			|| (phi_log_taken_fork(p->phi, p->id) < 0)
 			|| (pthread_mutex_unlock(p->lock) != 0)
 			|| (pthread_mutex_lock(&(p->eat)) != 0))
 			return (phi_death(p));
@@ -91,11 +91,11 @@ static void	*phi_normal_routine(t_name *p)
 	{
 		if ((pthread_mutex_lock(&(p->prev->fork)) != 0)
 			|| (pthread_mutex_lock(p->lock) != 0)
-			|| (phi_log_taken_fork(p->(t_philo *)phi, p->id) < 0)
+			|| (phi_log_taken_fork(p->phi, p->id) < 0)
 			|| (pthread_mutex_unlock(p->lock) != 0)
 			|| (pthread_mutex_lock(&(p->next->fork)) != 0)
 			|| (pthread_mutex_lock(p->lock) != 0)
-			|| (phi_log_taken_fork(p->(t_philo *)phi, p->id) < 0)
+			|| (phi_log_taken_fork(p->phi, p->id) < 0)
 			|| (pthread_mutex_unlock(p->lock) != 0)
 			|| (pthread_mutex_lock(&(p->eat)) != 0))
 			return (phi_death(p));
