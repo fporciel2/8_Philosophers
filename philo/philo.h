@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:05:21 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/18 09:12:15 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/18 11:57:39 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -57,6 +57,7 @@ typedef struct s_name
 	long long		i;
 	int				iseating;
 	int				isdead;
+	int				r;
 	long long		nop;
 	useconds_t		ttd;
 	useconds_t		tte;
@@ -95,5 +96,7 @@ int			phi_log_sleeping(t_philo *phi, long long nop);
 int			phi_log_thinking(t_philo *phi, long long nop);
 int			phi_log_dead(t_philo *phi, long long nop);
 void		*phi_superv(void *ph);
+void		*phi_routine(void *ph);
+void		*phi_death(t_name *p);
 
 #endif
