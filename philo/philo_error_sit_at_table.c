@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 13:42:57 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/17 14:40:02 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/18 09:03:02 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -73,11 +73,9 @@ int	phi_bad_checking(t_philo *phi, t_name *tmp, int param)
 	while (i && ((i != tmp) || ((j == NULL) && (i != j))))
 	{
 		j = i->next;
-		pthread_mutex_destroy(&(i->eat_calm));
+		pthread_mutex_destroy(&(i->eat));
 		if (param > 0)
-			pthread_mutex_destroy(&(i->killer));
-		if (param == 2)
-			pthread_mutex_destroy(&(i->over));
+			pthread_mutex_destroy(&(i->dead));
 		i = j;
 	}
 	return (phi_bad_sitting(phi, phi->philosophers));

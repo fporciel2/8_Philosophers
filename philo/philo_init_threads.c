@@ -6,7 +6,7 @@
 /*   By: fporciel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 14:39:55 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/14 10:22:26 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/18 09:12:54 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -37,12 +37,12 @@ static int	phi_join_threads(t_philo *phi)
 	t_name	*tmp;
 
 	tmp = phi->philosophers;
-	if (pthread_join(tmp->thread, NULL) != 0)
+	if (pthread_join(tmp->supervisor, NULL) != 0)
 		return (phi_pthread_create_failure(phi));
 	tmp = tmp->next;
 	while (tmp && (tmp != phi->philosophers))
 	{
-		if (pthread_join(tmp->thread, NULL) != 0)
+		if (pthread_join(tmp->supervisor, NULL) != 0)
 			return (phi_pthread_create_failure(phi));
 		tmp = tmp->next;
 	}
@@ -54,7 +54,8 @@ int	phi_init_threads(t_philo *phi)
 	t_name	*tmp;
 
 	tmp = phi->philosophers;
-	if ((pthread_create(&(tmp->thread), NULL, phi_routine, (void *)tmp) != 0))
+	if ((pthread_create(&(tmp->supervisor), NULL,
+				phi_superv, (void *)tmp) != 0))
 	{
 		tmp->active = 0;
 		return (phi_pthread_create_failure(phi));
@@ -63,8 +64,8 @@ int	phi_init_threads(t_philo *phi)
 	tmp = tmp->next;
 	while (tmp && (tmp != phi->philosophers))
 	{
-		if ((pthread_create(&(tmp->thread), NULL,
-					phi_routine, (void *)tmp) != 0))
+		if ((pthread_create(&(tmp->supervisor), NULL,
+					phi_superv, (void *)tmp) != 0))
 		{
 			tmp->active = 0;
 			return (phi_pthread_create_failure(phi));
