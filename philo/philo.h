@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:05:21 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/19 13:48:19 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/19 15:18:35 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -57,7 +57,8 @@ typedef struct s_name
 	long long		i;
 	int				iseating;
 	int				isdead;
-	int				forkid;
+	long long		prevfork;
+	long long		nextfork;
 	int				r;
 	long long		nop;
 	useconds_t		ttd;

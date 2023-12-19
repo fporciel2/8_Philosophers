@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 10:19:55 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/19 13:42:03 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/19 15:31:06 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -34,42 +34,32 @@
 
 int	phi_select_first_fork(t_name *p)
 {
-	if (pthread_mutex_lock(p->lock) != 0)
-		return (-1);
-	if (p->prev->forkid < p->next->forkid)
+	if (p->prevfork < p->nextfork)
 	{
-		if ((pthread_mutex_unlock(p->lock) != 0)
-			|| (pthread_mutex_lock(&(p->prev->fork)) != 0))
+		if (pthread_mutex_lock(&(p->prev->fork)) != 0)
 			return (-1);
 		return (1);
 	}
-	if (p->prev->forkid > p->next->forkid)
+	else
 	{
-		if ((pthread_mutex_unlock(p->lock) != 0)
-			|| (pthread_mutex_lock(&(p->next->fork)) != 0))
+		if (pthread_mutex_lock(&(p->next->fork)) != 0)
 			return (-1);
 		return (1);
 	}
-	return (pthread_mutex_unlock(p->lock));
 }
 
 int	phi_select_second_fork(t_name *p)
 {
-	if (pthread_mutex_lock(p->lock) != 0)
-		return (-1);
-	if (p->prev->forkid > p->next->forkid)
+	if (p->prevfork < p->nextfork)
 	{
-		if ((pthread_mutex_unlock(p->lock) != 0)
-			|| (pthread_mutex_lock(&(p->prev->fork)) != 0))
+		if (pthread_mutex_lock(&(p->prev->fork)) != 0)
 			return (-1);
 		return (1);
 	}
-	if (p->prev->forkid < p->next->forkid)
+	else
 	{
-		if ((pthread_mutex_unlock(p->lock) != 0)
-			|| (pthread_mutex_lock(&(p->next->fork)) != 0))
+		if (pthread_mutex_lock(&(p->next->fork)) != 0)
 			return (-1);
 		return (1);
 	}
-	return (pthread_mutex_unlock(p->lock));
 }
