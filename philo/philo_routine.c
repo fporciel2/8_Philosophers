@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 11:03:04 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/18 12:06:56 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/19 10:32:51 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -66,11 +66,11 @@ static void	*phi_abnormal_routine(t_name *p, long long val)
 {
 	while (val)
 	{
-		if ((pthread_mutex_lock(&(p->prev->fork)) != 0)
+		if ((phi_select_first_fork(p) < 0)
 			|| (pthread_mutex_lock(p->lock) != 0)
 			|| (phi_log_taken_fork(p->phi, p->id) < 0)
 			|| (pthread_mutex_unlock(p->lock) != 0)
-			|| (pthread_mutex_lock(&(p->next->fork)) != 0)
+			|| (phi_select_second_fork(p) < 0)
 			|| (pthread_mutex_lock(p->lock) != 0)
 			|| (phi_log_taken_fork(p->phi, p->id) < 0)
 			|| (pthread_mutex_unlock(p->lock) != 0)
@@ -89,11 +89,11 @@ static void	*phi_normal_routine(t_name *p)
 {
 	while (1)
 	{
-		if ((pthread_mutex_lock(&(p->prev->fork)) != 0)
+		if ((phi_select_first_fork(p) < 0)
 			|| (pthread_mutex_lock(p->lock) != 0)
 			|| (phi_log_taken_fork(p->phi, p->id) < 0)
 			|| (pthread_mutex_unlock(p->lock) != 0)
-			|| (pthread_mutex_lock(&(p->next->fork)) != 0)
+			|| (phi_select_second_fork(p) < 0)
 			|| (pthread_mutex_lock(p->lock) != 0)
 			|| (phi_log_taken_fork(p->phi, p->id) < 0)
 			|| (pthread_mutex_unlock(p->lock) != 0)

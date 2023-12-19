@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philosophers.c                                     :+:      :+:    :+:   */
+/*   philo_fork_selection.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/08 11:13:06 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/19 10:12:59 by fporciel         ###   ########.fr       */
+/*   Created: 2023/12/19 10:19:55 by fporciel          #+#    #+#             */
+/*   Updated: 2023/12/19 10:34:34 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -32,37 +32,44 @@
 
 #include "philo.h"
 
-static int	phi_start_dinner(t_philo *phi)
+int	phi_select_first_fork(t_name *p)
 {
-	if ((pthread_mutex_init(&(phi->lock), NULL) != 0)
-		|| (pthread_mutex_init(&(phi->avoid_wait_condition), NULL) != 0)
-		|| (phi_sit_at_table(phi) < 0) || (phi_init_threads(phi) < 0))
+	if (pthread_mutex_lock(p->awc) != 0)
+		return (-1);
+	if (p->prev->forkid < p->next->forkid)
 	{
-		pthread_mutex_destroy(&(phi->avoid_wait_condition));
-		return (pthread_mutex_destroy(&(phi->lock)));
+		if ((pthread_mutex_unlock(p->awc) != 0)
+			|| (pthread_mutex_lock(&(p->prev->fork)) != 0))
+			return (-1);
+		return (1);
 	}
-	return (phi_clean_table(phi));
+	if (p->prev->forkid > p->next->forkid)
+	{
+		if ((pthread_mutex_unlock(p->awc) != 0)
+			|| (pthread_mutex_lock(&(p->next->fork)) != 0))
+			return (-1);
+		return (1);
+	}
+	return (pthread_mutex_unlock(p->awc));
 }
 
-static int	phi_check_input_correctness(t_philo *phi)
+int	phi_select_second_fork(t_name *p)
 {
-	if (phi->nop == 0)
-		return (0);
-	return (1);
-}
-
-int	main(int argc, char **argv)
-{
-	static t_philo	phi;
-
-	if ((argc < 5) || (argc > 6))
-		return (0);
-	argc--;
-	argv++;
-	phi.result = phi_init(&phi, argc, argv);
-	if ((phi.result < 0) || (!phi_check_input_correctness(&phi)))
-		return (phi.result);
-	if (argc == 4)
-		phi.notepme = -1;
-	return (phi_start_dinner(&phi));
+	if (pthread_mutex_lock(p->awc) != 0)
+		return (-1);
+	if (p->prev->forkid > p->next->forkid)
+	{
+		if ((pthread_mutex_unlock(p->awc) != 0)
+			|| (pthread_mutex_lock(&(p->prev->fork)) != 0))
+			return (-1);
+		return (1);
+	}
+	if (p->prev->forkid < p->next->forkid)
+	{
+		if ((pthread_mutex_unlock(p->awc) != 0)
+			|| (pthread_mutex_lock(&(p->next->fork)) != 0))
+			return (-1);
+		return (1);
+	}
+	return (pthread_mutex_unlock(p->awc));
 }
