@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 13:53:51 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/19 10:47:19 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/19 13:47:41 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -47,6 +47,5 @@ int	phi_clean_table(t_philo *phi)
 		(phi->nop)--;
 	}
 	phi->philosophers = NULL;
-	pthread_mutex_destroy(&(phi->avoid_wait_condition));
 	return (pthread_mutex_destroy(&(phi->lock)));
 }

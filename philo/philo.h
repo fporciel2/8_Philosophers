@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:05:21 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/19 10:33:26 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/19 13:48:19 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -48,7 +48,6 @@ typedef struct s_name
 	pthread_t		thread;
 	pthread_t		supervisor;
 	pthread_mutex_t	*lock;
-	pthread_mutex_t	*awc;
 	pthread_mutex_t	eat;
 	pthread_mutex_t	dead;
 	pthread_mutex_t	fork;
@@ -73,7 +72,6 @@ typedef struct s_name
 typedef struct s_philo
 {
 	pthread_mutex_t	lock;
-	pthread_mutex_t	avoid_wait_condition;
 	long long		nop;
 	useconds_t		ttd;
 	useconds_t		tte;
