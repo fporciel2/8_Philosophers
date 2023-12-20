@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 11:57:10 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/18 12:00:23 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/20 13:08:20 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -34,9 +34,13 @@
 
 void	*phi_death(t_name *p)
 {
-	if (pthread_mutex_lock(&(p->dead)) != 0)
+	t_philo	*phi;
+
+	if (pthread_mutex_lock(p->lock) != 0)
 		return (NULL);
-	p->isdead = 1;
-	pthread_mutex_unlock(&(p->dead));
+	phi = (t_philo *)p->phi;
+	*(p->deadid) = p->id;
+	phi_log_dead(phi, p->id);
+	pthread_mutex_unlock(p->lock);
 	return (NULL);
 }

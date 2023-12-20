@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 11:38:03 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/19 15:23:21 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/20 13:16:08 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -32,25 +32,6 @@
 
 #include "philo.h"
 
-static void	phi_forks(t_name *tmp)
-{
-	if (tmp->id == 1)
-	{
-		tmp->prevfork = tmp->nop;
-		tmp->nextfork = 2;
-	}
-	else if (tmp->id == tmp->nop)
-	{
-		tmp->prevfork = (tmp->nop - 1);
-		tmp->nextfork = 1;
-	}
-	else
-	{
-		tmp->prevfork = (tmp->id - 1);
-		tmp->nextfork = (tmp->id + 1);
-	}
-}
-
 static int	phi_init_internal_checkers(t_name *head, t_philo *phi)
 {
 	unsigned long long	i;
@@ -62,12 +43,13 @@ static int	phi_init_internal_checkers(t_name *head, t_philo *phi)
 	{
 		if (pthread_mutex_init(&(tmp->eat), NULL) != 0)
 			return (phi_bad_checking(phi, tmp, 0));
-		if (pthread_mutex_init(&(tmp->dead), NULL) != 0)
-			return (phi_bad_checking(phi, tmp, 1));
 		tmp->iseating = 0;
 		tmp->isdead = 0;
 		tmp->i = 0;
-		phi_forks(tmp);
+		tmp->deadid = &(phi->deadid);
+		*(tmp->deadid) = 0;
+		tmp->isover = &(phi->isover);
+		*(tmp->isover) = 0;
 		i++;
 	}
 	return (1);

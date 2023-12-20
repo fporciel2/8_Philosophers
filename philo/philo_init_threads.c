@@ -6,7 +6,7 @@
 /*   By: fporciel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 14:39:55 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/18 09:12:54 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/20 13:18:57 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -49,6 +49,18 @@ static int	phi_join_threads(t_philo *phi)
 	return (1);
 }
 
+static int	phi_supervisor(t_philo *phi)
+{
+	while (1)
+	{
+		if (phi->deadid != 0)
+			return (phi_detach(phi));
+		if (phi->isover != 0)
+			return (phi_join_threads(phi));
+	}
+	return (phi_join_threads(phi));
+}
+
 int	phi_init_threads(t_philo *phi)
 {
 	t_name	*tmp;
@@ -73,5 +85,5 @@ int	phi_init_threads(t_philo *phi)
 		tmp->active = 1;
 		tmp = tmp->next;
 	}
-	return (phi_join_threads(phi));
+	return (phi_supervisor(phi));
 }

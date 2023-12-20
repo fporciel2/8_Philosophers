@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 14:42:17 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/16 14:44:35 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/20 13:17:54 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -36,44 +36,60 @@ int	phi_log_taken_fork(t_philo *phi, long long nop)
 {
 	unsigned long long	tmstmp;
 
-	if (gettimeofday(&(phi->tv), NULL) < 0)
+	if ((pthread_mutex_lock(&(phi->lock)) != 0)
+		|| (gettimeofday(&(phi->tv), NULL) < 0))
 		return (-1);
 	tmstmp = (unsigned long long)(phi->tv.tv_sec) * 1000
 		+ (unsigned long long)(phi->tv.tv_usec) / 1000;
-	return (printf("\n%llu %lld has taken a fork", tmstmp, nop));
+	if ((printf("\n%llu %lld has taken a fork", tmstmp, nop) < 0)
+		|| (pthread_mutex_unlock(&(phi->lock)) != 0))
+		return (-1);
+	return (1);
 }
 
 int	phi_log_eating(t_philo *phi, long long nop)
 {
 	unsigned long long	tmstmp;
 
-	if (gettimeofday(&(phi->tv), NULL) < 0)
+	if ((pthread_mutex_lock(&(phi->lock)) != 0)
+		|| (gettimeofday(&(phi->tv), NULL) < 0))
 		return (-1);
 	tmstmp = (unsigned long long)(phi->tv.tv_sec) * 1000
 		+ (unsigned long long)(phi->tv.tv_usec) / 1000;
-	return (printf("\n%llu %lld is eating", tmstmp, nop));
+	if ((printf("\n%llu %lld is eating", tmstmp, nop) < 0)
+		|| (pthread_mutex_unlock(&(phi->lock)) != 0))
+		return (-1);
+	return (1);
 }
 
 int	phi_log_sleeping(t_philo *phi, long long nop)
 {
 	unsigned long long	tmstmp;
 
-	if (gettimeofday(&(phi->tv), NULL) < 0)
+	if ((pthread_mutex_lock(&(phi->lock)) != 0)
+		|| (gettimeofday(&(phi->tv), NULL) < 0))
 		return (-1);
 	tmstmp = (unsigned long long)(phi->tv.tv_sec) * 1000
 		+ (unsigned long long)(phi->tv.tv_usec) / 1000;
-	return (printf("\n%llu %lld is sleeping", tmstmp, nop));
+	if ((printf("\n%llu %lld is eating", tmstmp, nop) < 0)
+		|| (pthread_mutex_unlock(&(phi->lock)) != 0))
+		return (-1);
+	return (1);
 }
 
 int	phi_log_thinking(t_philo *phi, long long nop)
 {
 	unsigned long long	tmstmp;
 
-	if (gettimeofday(&(phi->tv), NULL) < 0)
+	if ((pthread_mutex_lock(&(phi->lock)) != 0)
+		|| (gettimeofday(&(phi->tv), NULL) < 0))
 		return (-1);
 	tmstmp = (unsigned long long)(phi->tv.tv_sec) * 1000
 		+ (unsigned long long)(phi->tv.tv_usec) / 1000;
-	return (printf("\n%llu %lld is thinking", tmstmp, nop));
+	if ((printf("\n%llu %lld is eating", tmstmp, nop) < 0)
+		|| (pthread_mutex_unlock(&(phi->lock)) != 0))
+		return (-1);
+	return (1);
 }
 
 int	phi_log_dead(t_philo *phi, long long nop)
@@ -84,5 +100,5 @@ int	phi_log_dead(t_philo *phi, long long nop)
 		return (-1);
 	tmstmp = (unsigned long long)(phi->tv.tv_sec) * 1000
 		+ (unsigned long long)(phi->tv.tv_usec) / 1000;
-	return (printf("\n%llu %lld is dead", tmstmp, nop));
+	return (printf("\n%llu %lld is eating", tmstmp, nop));
 }

@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 13:53:51 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/19 13:47:41 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/20 12:56:15 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -40,7 +40,6 @@ int	phi_clean_table(t_philo *phi)
 	{
 		pthread_mutex_destroy(&(phi->philosophers->fork));
 		pthread_mutex_destroy(&(phi->philosophers->eat));
-		pthread_mutex_destroy(&(phi->philosophers->dead));
 		tmp = phi->philosophers->next;
 		free(phi->philosophers);
 		phi->philosophers = tmp;
