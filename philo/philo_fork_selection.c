@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/19 10:19:55 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/19 15:31:06 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/20 11:08:52 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -52,13 +52,13 @@ int	phi_select_second_fork(t_name *p)
 {
 	if (p->prevfork < p->nextfork)
 	{
-		if (pthread_mutex_lock(&(p->prev->fork)) != 0)
+		if (pthread_mutex_lock(&(p->next->fork)) != 0)
 			return (-1);
 		return (1);
 	}
 	else
 	{
-		if (pthread_mutex_lock(&(p->next->fork)) != 0)
+		if (pthread_mutex_lock(&(p->prev->fork)) != 0)
 			return (-1);
 		return (1);
 	}

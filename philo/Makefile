@@ -6,7 +6,7 @@
 #    By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/06 13:45:55 by fporciel          #+#    #+#              #
-#    Updated: 2023/12/17 11:22:03 by fporciel         ###   ########.fr        #
+#    Updated: 2023/12/20 09:35:42 by fporciel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 # 'Philosophers' is a simulation program that explores concurrent programming
@@ -74,6 +74,10 @@ fclean: clean
 	rm -f $(NAME)
 
 re: clean fclean all
+
+reasan: clean fclean asan
+
+retsan: clean fclean tsan
 
 autogit: fclean
 	git status
