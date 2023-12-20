@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 11:03:04 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/20 14:17:51 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/20 14:39:44 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -32,19 +32,46 @@
 
 #include "philo.h"
 
+static int	phi_continue(t_name *p, unsigned long long *s, unsigned long long *d)
+{
+	t_philo	*phi;
+
+	phi = (t_philo *)p->phi;
+	if ((pthread_mutex_unlock(&(p->next->fork)) != 0)
+		|| (phi_check_time(p, s, d) < 0)
+		|| (pthread_mutex_unlock(&(p->prev->fork)) != 0)
+		|| (phi_check_time(p, s, d) < 0)
+		|| (phi_log_sleeping(phi, p->id) < 0)
+		|| (usleep(p->tts) < 0)
+		|| (phi_check_time(p, s, d) < 0)
+
+}
+
 static void	*phi_abnormal_routine(t_name *p, long long val, t_philo *phi)
 {
 	unsigned long long	start;
 	unsigned long long	delta;
 
 	start = 0;
+	delta = 0;
 	if (phi_assign_time(p, &start) < 0)
-		return (phi_isover(p));
+		return (phi_isover(p, &delta));
 	while (val)
 	{
+		if ((phi_check_time(p, &start, &delta) < 0)
+			|| (pthread_mutex_lock(&(p->prev->fork)) != 0)
+			|| (phi_check_time(p, &start, &delta) < 0)
+			|| (phi_log_taken_fork(phi, p->id) < 0)
+			|| (pthread_mutex_lock(&(p->next->fork)) != 0)
+			|| (phi_check_time(p, &start, &delta) < 0)
+			|| (phi_log_eating(phi, p->id) < 0)
+			|| (usleep(p->tte) < 0)
+			|| (phi_assign_time(p, &start) < 0)
+			|| (phi_continue(p, &start, &delta) < 0))
+			return (phi_isover(p, &delta));
 		val--;
 	}
-	return (phi_isover(p));
+	return (phi_isover(p, &delta));
 }
 
 static void	*phi_normal_routine(t_name *p, t_philo *phi)
@@ -54,15 +81,22 @@ static void	*phi_normal_routine(t_name *p, t_philo *phi)
 
 	start = 0;
 	if (phi_assign_time(p, &start) < 0)
-		return (phi_isover(p));
+		return (phi_isover(p, &delta));
 	while (1)
 	{
 		if ((phi_check_time(p, &start, &delta) < 0)
 			|| (pthread_mutex_lock(&(p->prev->fork)) != 0)
+			|| (phi_check_time(p, &start, &delta) < 0)
 			|| (phi_log_taken_fork(phi, p->id) < 0)
 			|| (pthread_mutex_lock(&(p->next->fork)) != 0)
+			|| (phi_check_time(p, &start, &delta) < 0)
+			|| (phi_log_eating(phi, p->id) < 0)
+			|| (usleep(p->tte) < 0)
+			|| (phi_assign_time(p, &start) < 0)
+			|| (phi_continue(p, &start, &delta) < 0))
+			return (phi_isover(p, &delta));
 	}
-	return (phi_isover(p));
+	return (phi_isover(p, &delta));
 }
 
 void	*phi_routine(void *ph)
