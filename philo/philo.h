@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:05:21 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/20 14:16:32 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/20 15:12:06 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -45,42 +45,44 @@
 
 typedef struct s_name
 {
-	pthread_t		thread;
-	pthread_mutex_t	*lock;
-	pthread_mutex_t	eat;
-	pthread_mutex_t	fork;
-	void			*phi;
-	long long		id;
-	long long		*deadid;
-	long long		*isover;
-	int				active;
-	long long		i;
-	int				iseating;
-	int				r;
-	long long		nop;
-	useconds_t		ttd;
-	useconds_t		tte;
-	useconds_t		tts;
-	long long		notepme;
-	struct timeval	tv;
-	struct s_name	*prev;
-	struct s_name	*next;
-}					t_name;
+	pthread_t			thread;
+	pthread_mutex_t		*lock;
+	pthread_mutex_t		eat;
+	pthread_mutex_t		fork;
+	void				*phi;
+	long long			id;
+	long long			*deadid;
+	long long			*isover;
+	unsigned long long	*time;
+	int					active;
+	long long			i;
+	int					iseating;
+	int					r;
+	long long			nop;
+	useconds_t			ttd;
+	useconds_t			tte;
+	useconds_t			tts;
+	long long			notepme;
+	struct timeval		tv;
+	struct s_name		*prev;
+	struct s_name		*next;
+}						t_name;
 
 typedef struct s_philo
 {
-	pthread_mutex_t	lock;
-	long long		isover;
-	long long		deadid;
-	long long		nop;
-	useconds_t		ttd;
-	useconds_t		tte;
-	useconds_t		tts;
-	long long		notepme;
-	int				result;
-	struct s_name	*philosophers;
-	struct timeval	tv;
-}					t_philo;
+	pthread_mutex_t		lock;
+	long long			isover;
+	long long			deadid;
+	unsigned long long	time;
+	long long			nop;
+	useconds_t			ttd;
+	useconds_t			tte;
+	useconds_t			tts;
+	long long			notepme;
+	int					result;
+	struct s_name		*philosophers;
+	struct timeval		tv;
+}						t_philo;
 
 int			phi_init(t_philo *phi, int argc, char **argv);
 int			ft_isdigit(char c);
@@ -100,7 +102,7 @@ int			phi_log_thinking(t_philo *phi, long long nop);
 int			phi_log_dead(t_philo *phi, long long nop);
 void		*phi_routine(void *ph);
 void		*phi_death(t_name *p);
-int			phi_assign_time(t_name *p, unsigned long long *s);
-int			phi_check_time(t_name *p, unsigned long long *s, unsigned long long *d);
+void		phi_assign_time(unsigned long long *s);
+int			phi_check_t(t_name *p, unsigned long long *s, unsigned long long *d);
 
 #endif

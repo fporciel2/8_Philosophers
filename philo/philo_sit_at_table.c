@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/09 11:38:03 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/20 13:16:08 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/20 15:08:40 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -50,6 +50,8 @@ static int	phi_init_internal_checkers(t_name *head, t_philo *phi)
 		*(tmp->deadid) = 0;
 		tmp->isover = &(phi->isover);
 		*(tmp->isover) = 0;
+		tmp->time = &(phi->time);
+		*(tmp->time) = 0;
 		i++;
 	}
 	return (1);
