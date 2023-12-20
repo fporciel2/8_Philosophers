@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 11:03:04 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/20 11:44:40 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/20 14:17:51 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -32,88 +32,53 @@
 
 #include "philo.h"
 
-static void	*phi_end_routine(t_name *p)
+static void	*phi_abnormal_routine(t_name *p, long long val, t_philo *phi)
 {
-	if ((pthread_mutex_lock(p->lock) != 0)
-		|| (phi_log_sleeping(p->phi, p->id) < 0)
-		|| (pthread_mutex_unlock(p->lock) != 0)
-		|| (usleep(p->tts) < 0)
-		|| (pthread_mutex_lock(p->lock) != 0)
-		|| (phi_log_thinking(p->phi, p->id) < 0)
-		|| (pthread_mutex_unlock(p->lock) != 0))
-		return (phi_death(p));
-	return (p->phi);
-}
+	unsigned long long	start;
+	unsigned long long	delta;
 
-static void	*phi_continue_routine(t_name *p)
-{
-	if ((pthread_mutex_lock(p->lock) != 0)
-		|| (phi_log_eating(p->phi, p->id) < 0)
-		|| (pthread_mutex_unlock(p->lock) != 0)
-		|| (usleep(p->tte) < 0)
-		|| (pthread_mutex_lock(&(p->eat)) != 0))
-		return (phi_death(p));
-	p->iseating = 0;
-	if ((pthread_mutex_unlock(&(p->eat)) != 0)
-		|| (pthread_mutex_unlock(&(p->next->fork)) != 0)
-		|| (pthread_mutex_unlock(&(p->prev->fork)) != 0)
-		|| (phi_end_routine(p) != p->phi))
-		return (phi_death(p));
-	return (p->phi);
-}
-
-static void	*phi_abnormal_routine(t_name *p, long long val)
-{
+	start = 0;
+	if (phi_assign_time(p, &start) < 0)
+		return (phi_isover(p));
 	while (val)
 	{
-		if ((pthread_mutex_lock(&(p->prev->fork)) != 0)
-			|| (pthread_mutex_lock(p->lock) != 0)
-			|| (phi_log_taken_fork(p->phi, p->id) < 0)
-			|| (pthread_mutex_unlock(p->lock) != 0)
-			|| (pthread_mutex_lock(&(p->next->fork)) != 0)
-			|| (pthread_mutex_lock(p->lock) != 0)
-			|| (phi_log_taken_fork(p->phi, p->id) < 0)
-			|| (pthread_mutex_unlock(p->lock) != 0)
-			|| (pthread_mutex_lock(&(p->eat)) != 0))
-			return (phi_death(p));
-		p->iseating = 1;
-		if ((pthread_mutex_unlock(&(p->eat)) != 0)
-			|| (phi_continue_routine(p) != p->phi))
-			return (phi_death(p));
 		val--;
 	}
-	return (phi_death(p));
+	return (phi_isover(p));
 }
 
-static void	*phi_normal_routine(t_name *p)
+static void	*phi_normal_routine(t_name *p, t_philo *phi)
 {
+	unsigned long long	start;
+	unsigned long long	delta;
+
+	start = 0;
+	if (phi_assign_time(p, &start) < 0)
+		return (phi_isover(p));
 	while (1)
 	{
-		if ((phi_select_first_fork(p) < 0)
-			|| (pthread_mutex_lock(p->lock) != 0)
-			|| (phi_log_taken_fork(p->phi, p->id) < 0)
-			|| (pthread_mutex_unlock(p->lock) != 0)
-			|| (phi_select_second_fork(p) < 0)
-			|| (pthread_mutex_lock(p->lock) != 0)
-			|| (phi_log_taken_fork(p->phi, p->id) < 0)
-			|| (pthread_mutex_unlock(p->lock) != 0)
-			|| (pthread_mutex_lock(&(p->eat)) != 0))
-			return (phi_death(p));
-		p->iseating = 1;
-		if ((pthread_mutex_unlock(&(p->eat)) != 0)
-			|| (phi_continue_routine(p) != p->phi))
-			return (phi_death(p));
+		if ((phi_check_time(p, &start, &delta) < 0)
+			|| (pthread_mutex_lock(&(p->prev->fork)) != 0)
+			|| (phi_log_taken_fork(phi, p->id) < 0)
+			|| (pthread_mutex_lock(&(p->next->fork)) != 0)
 	}
-	return (phi_death(p));
+	return (phi_isover(p));
 }
 
 void	*phi_routine(void *ph)
 {
 	t_name	*p;
+	t_philo	*phi;
 
 	p = (t_name *)ph;
-	if (p->notepme < 0)
-		return (phi_normal_routine(p));
+	phi = (t_philo *)p->phi;
+	if ((p->next == NULL) || (p->prev == NULL))
+	{
+		usleep(p->ttd);
+		return (phi_death(p));
+	}
+	else if (p->notepme < 0)
+		return (phi_normal_routine(p, phi));
 	else
-		return (phi_abnormal_routine(p, p->notepme));
+		return (phi_abnormal_routine(p, p->notepme, phi));
 }

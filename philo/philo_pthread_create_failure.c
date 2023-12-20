@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/16 13:59:49 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/18 09:10:37 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/20 13:24:29 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -38,12 +38,12 @@ int	phi_pthread_create_failure(t_philo *phi)
 
 	tmp = phi->philosophers;
 	if (tmp->active != 0)
-		pthread_detach(tmp->supervisor);
+		pthread_detach(tmp->thread);
 	tmp = tmp->next;
 	while (tmp && (tmp != phi->philosophers))
 	{
 		if (tmp->active != 0)
-			pthread_detach(tmp->supervisor);
+			pthread_detach(tmp->thread);
 		tmp = tmp->next;
 	}
 	return (phi_bad_checking(phi, phi->philosophers, 1));

@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:05:21 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/20 13:18:41 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/20 14:16:32 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -100,5 +100,7 @@ int			phi_log_thinking(t_philo *phi, long long nop);
 int			phi_log_dead(t_philo *phi, long long nop);
 void		*phi_routine(void *ph);
 void		*phi_death(t_name *p);
+int			phi_assign_time(t_name *p, unsigned long long *s);
+int			phi_check_time(t_name *p, unsigned long long *s, unsigned long long *d);
 
 #endif

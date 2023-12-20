@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 11:57:10 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/20 13:08:20 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/20 14:21:04 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -43,4 +43,27 @@ void	*phi_death(t_name *p)
 	phi_log_dead(phi, p->id);
 	pthread_mutex_unlock(p->lock);
 	return (NULL);
+}
+
+int	phi_assign_time(t_name *p, unsigned long long *s)
+{
+	if (gettimeofday(&(p->tv), NULL) < 0)
+		return (-1);
+	*s = (unsigned long long)(p->tv.tv_sec) * 1000
+		+ (unsigned long long)(p->tv.tv_usec) / 1000;
+	return (1);
+}
+
+int	phi_check_time(t_name *p, unsigned long long *s, unsigned long long *d)
+{
+	unsigned long long	tmstmp;
+
+	if (gettimeofday(&(p->tv), NULL) < 0)
+		return (-1);
+	tmstmp = (unsigned long long)(p->tv.tv_sec) * 1000
+		+ (unsigned long long)(p->tv.tv_usec) / 1000;
+	*d = tmstmp - *s;
+	if (*d > p->ttd)
+		return (-1);
+	return (1);
 }
