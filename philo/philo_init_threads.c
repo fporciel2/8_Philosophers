@@ -6,7 +6,7 @@
 /*   By: fporciel <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 14:39:55 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/20 15:12:58 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/21 09:47:08 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -70,11 +70,6 @@ static int	phi_supervisor(t_philo *phi)
 {
 	while (1)
 	{
-		phi_assign_time(phi->time);
-		if (phi->deadid != 0)
-			return (phi_detach(phi));
-		if (phi->isover != 0)
-			return (phi_join_threads(phi));
 	}
 	return (phi_join_threads(phi));
 }
