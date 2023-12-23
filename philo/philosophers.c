@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   philosophers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/06 14:05:21 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/23 09:57:22 by fporciel         ###   ########.fr       */
+/*   Created: 2023/12/23 09:46:35 by fporciel          #+#    #+#             */
+/*   Updated: 2023/12/23 09:55:54 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -30,39 +30,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef PHILO_H
-# define PHILO_H
-# define _DEFAULT_SOURCE
-# include <string.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <sys/time.h>
-# include <pthread.h>
-# include <stddef.h>
-# include <time.h>
-# include <sys/types.h>
+#include "philo.h"
 
-typedef struct s_philo
+int	main(int argc, char **argv)
 {
-	pthread_t		philo;
-	pthread_mutex_t	fork;
-	pthread_mutex_t	death;
-	pthread_mutex_t	*output;
-	int				iseating;
-	struct s_philo	*prev;
-	struct s_philo	*next;
-}					t_philo;
+	static t_god	g;
 
-typedef struct s_god
-{
-	pthread_mutex_t	*death;
-	pthread_mutex_t	output;
-	struct s_philo	*phi;
-}					t_god;
-
-int	phi_verify_input(int argc, char **argv);
-int	phi_create_god(t_god *g, int argc, char **argv);
-int	phi_simulation(t_god *g);
-
-#endif
+	argc--;
+	argv++;
+	if ((argc < 4) || (argc > 5) || (!phi_verify_input(argc, argv))
+		|| (!(phi_create_god(&g, argc, argv))))
+		return (0);
+	return (phi_simulation(&g));
+}
