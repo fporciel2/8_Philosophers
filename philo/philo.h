@@ -6,7 +6,7 @@
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:05:21 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/21 09:49:08 by fporciel         ###   ########.fr       */
+/*   Updated: 2023/12/23 09:40:08 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -43,58 +43,26 @@
 # include <time.h>
 # include <sys/types.h>
 
-typedef struct s_name
-{
-	pthread_t			thread;
-	pthread_mutex_t		*lock;
-	pthread_mutex_t		fork;
-	void				*phi;
-	long long			id;
-	int					active;
-	int					r;
-	long long			nop;
-	useconds_t			ttd;
-	useconds_t			tte;
-	useconds_t			tts;
-	long long			notepme;
-	struct timeval		tv;
-	struct s_name		*prev;
-	struct s_name		*next;
-}						t_name;
-
 typedef struct s_philo
 {
-	pthread_mutex_t		lock;
-	long long			isover;
-	long long			deadid;
-	unsigned long long	time;
-	long long			nop;
-	useconds_t			ttd;
-	useconds_t			tte;
-	useconds_t			tts;
-	long long			notepme;
-	int					result;
-	struct s_name		*philosophers;
-	struct timeval		tv;
-}						t_philo;
+	pthread_t		philo;
+	pthread_mutex_t	fork;
+	pthread_mutex_t	*death;
+	pthread_mutex_t	*output;
+	int				iseating;
+	int				isleeping;
+	int				isthinking;
+	int				hasrightfork;
+	int				hasleftfork;
+	struct s_philo	*prev;
+	struct s_philo	*next;
+}					t_philo;
 
-int			phi_init(t_philo *phi, int argc, char **argv);
-int			ft_isdigit(char c);
-long long	ft_atol(char *nptr);
-useconds_t	phi_atoitou(char *nptr);
-int			phi_sit_at_table(t_philo *phi);
-int			phi_init_threads(t_philo *phi);
-int			phi_pthread_create_failure(t_philo *phi);
-int			phi_error_sit_at_table(t_philo *phi);
-int			phi_bad_sitting(t_philo *phi, t_name *tmp);
-int			phi_bad_checking(t_philo *phi, t_name *tmp, int param);
-int			phi_clean_table(t_philo *phi);
-int			phi_log_taken_fork(t_philo *phi, long long nop);
-int			phi_log_eating(t_philo *phi, long long nop);
-int			phi_log_sleeping(t_philo *phi, long long nop);
-int			phi_log_thinking(t_philo *phi, long long nop);
-int			phi_log_dead(t_philo *phi, long long nop);
-void		*phi_routine(void *ph);
-void		*phi_death(t_name *p);
+typedef struct s_god
+{
+	pthread_mutex_t	death;
+	pthread_mutex_t	output;
+	struct s_philo	*phi;
+}					t_god;
 
 #endif
