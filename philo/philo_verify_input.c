@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   philo_verify_input.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fporciel <fporciel@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/06 14:05:21 by fporciel          #+#    #+#             */
-/*   Updated: 2023/12/23 10:17:16 by fporciel         ###   ########.fr       */
+/*   Created: 2023/12/23 09:58:46 by fporciel          #+#    #+#             */
+/*   Updated: 2023/12/23 10:19:06 by fporciel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 /*
@@ -30,43 +30,34 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef PHILO_H
-# define PHILO_H
-# define _DEFAULT_SOURCE
-# include <string.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <sys/time.h>
-# include <pthread.h>
-# include <stddef.h>
-# include <time.h>
-# include <sys/types.h>
-# include <limits.h>
+#include "philo.h"
 
-typedef struct s_philo
+static size_t	phi_checker(char *str)
 {
-	pthread_t		philo;
-	pthread_mutex_t	fork;
-	pthread_mutex_t	death;
-	pthread_mutex_t	*output;
-	int				iseating;
-	int				tts;
-	int				tte;
-	struct s_philo	*prev;
-	struct s_philo	*next;
-}					t_philo;
+	size_t	strlen;
 
-typedef struct s_god
+	strlen = 0;
+	if (!str)
+		return (strlen);
+	while (str[strlen])
+	{
+		if ((str[strlen] < 48) || (str[strlen] > 57))
+			return (0);
+		strlen++;
+	}
+	return (strlen);
+}
+
+int	phi_verify_input(char **argv)
 {
-	pthread_mutex_t	*death;
-	pthread_mutex_t	output;
-	int				ttd;
-	struct s_philo	*phi;
-}					t_god;
+	int	i;
 
-int	phi_verify_input(char **argv);
-int	phi_create_god(t_god *g, char **argv);
-int	phi_simulation(t_god *g);
-
-#endif
+	i = 0;
+	while (argv && argv[i])
+	{
+		if (!phi_checker(argv[i]))
+			return (0);
+		i++;
+	}
+	return (i);
+}
